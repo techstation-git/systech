@@ -14,6 +14,9 @@ from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_sched
 	make_new_active_asset_depr_schedules_and_cancel_current_ones,
 )
 
+
+
+
 class AssetRevaluation(Document):
 	def validate(self):
 		self.validate_data()
@@ -61,9 +64,6 @@ class AssetRevaluation(Document):
 		# I will add a default 'revaluation_account' logical check.
 		# If revaluation_difference > 0 (Gain), Credit Revaluation Reserve/Gain. Debit Asset.
 		# If revaluation_difference < 0 (Loss), Debit Loss Account. Credit Asset.
-		
-		# Since I can't add fields easily in this step (needs JSON update), I will define a placeholder or look for a default.
-		# defaulting to depreciation_expense_account for Simplicity as per "Asset Value Adjustment" often links there if not specified.
 		
 		account_for_difference = depreciation_expense_account # Placeholder, strictly speaking should be separate.
 
