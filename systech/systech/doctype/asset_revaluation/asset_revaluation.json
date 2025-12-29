@@ -1,0 +1,225 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "creation": "2025-12-29 12:38:39.139064",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "name": "Asset Revaluation",
+  "module": "Systech",
+  "field_order": [
+    "section_inputs",
+    "asset",
+    "company",
+    "revaluation_date",
+    "reason_for_revaluation",
+    "amended_from",
+    "column_break_inputs",
+    "new_asset_value",
+    "effective_from_date",
+    "life_input_mode",
+    "allow_life_override",
+    "new_remaining_life",
+    "new_remaining_life_months",
+    "section_read_only",
+    "original_cost",
+    "accumulated_depreciation",
+    "net_book_value",
+    "depreciation_method",
+    "column_break_read_only",
+    "total_useful_life",
+    "remaining_useful_life",
+    "revaluation_difference",
+    "revaluation_type",
+    "new_annual_depreciation",
+    "posting_status",
+    "journal_entry",
+    "workflow_state"
+  ],
+  "fields": [
+    {
+      "fieldname": "section_inputs",
+      "fieldtype": "Section Break",
+      "label": "Revaluation Inputs"
+    },
+    {
+      "fieldname": "asset",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Asset",
+      "options": "Asset",
+      "reqd": 1
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "label": "Company",
+      "options": "Company",
+      "read_only": 1,
+      "fetch_from": "asset.company"
+    },
+    {
+      "fieldname": "revaluation_date",
+      "fieldtype": "Date",
+      "label": "Revaluation Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "reason_for_revaluation",
+      "fieldtype": "Small Text",
+      "label": "Reason for Revaluation",
+      "reqd": 1
+    },
+    {
+      "fieldname": "amended_from",
+      "fieldtype": "Link",
+      "label": "Amended From",
+      "no_copy": 1,
+      "options": "Asset Revaluation",
+      "print_hide": 1,
+      "read_only": 1
+    },
+    {
+      "fieldname": "column_break_inputs",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "new_asset_value",
+      "fieldtype": "Currency",
+      "label": "Value Adjustment",
+      "reqd": 1
+    },
+    {
+      "fieldname": "effective_from_date",
+      "fieldtype": "Date",
+      "label": "Effective From Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "life_input_mode",
+      "fieldtype": "Select",
+      "label": "Life Input Mode",
+      "options": "Years\nMonths",
+      "default": "Years",
+      "reqd": 1
+    },
+    {
+      "fieldname": "allow_life_override",
+      "fieldtype": "Check",
+      "label": "Allow Life Override",
+      "default": 0
+    },
+    {
+      "fieldname": "new_remaining_life",
+      "fieldtype": "Float",
+      "label": "Additional Life (Years)",
+      "depends_on": "eval:doc.life_input_mode == 'Years'"
+    },
+    {
+      "fieldname": "new_remaining_life_months",
+      "fieldtype": "Float",
+      "label": "Additional Life (Months)",
+      "depends_on": "eval:doc.life_input_mode == 'Months'"
+    },
+    {
+      "fieldname": "section_read_only",
+      "fieldtype": "Section Break",
+      "label": "Current Values & Impact"
+    },
+    {
+      "fieldname": "original_cost",
+      "fieldtype": "Currency",
+      "label": "Original Cost",
+      "read_only": 1
+    },
+    {
+      "fieldname": "accumulated_depreciation",
+      "fieldtype": "Currency",
+      "label": "Accumulated Depreciation",
+      "read_only": 1
+    },
+    {
+      "fieldname": "net_book_value",
+      "fieldtype": "Currency",
+      "label": "Net Book Value",
+      "read_only": 1
+    },
+    {
+      "fieldname": "depreciation_method",
+      "fieldtype": "Data",
+      "label": "Depreciation Method",
+      "read_only": 1,
+      "fetch_from": "asset.depreciation_method"
+    },
+    {
+      "fieldname": "column_break_read_only",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "total_useful_life",
+      "fieldtype": "Float",
+      "label": "Total Useful Life (Years)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "remaining_useful_life",
+      "fieldtype": "Float",
+      "label": "Remaining Useful Life",
+      "read_only": 1
+    },
+    {
+      "fieldname": "revaluation_difference",
+      "fieldtype": "Currency",
+      "label": "Revaluation Difference",
+      "read_only": 1
+    },
+    {
+      "fieldname": "revaluation_type",
+      "fieldtype": "Select",
+      "label": "Revaluation Type",
+      "options": "Increase\nDecrease",
+      "read_only": 1
+    },
+    {
+      "fieldname": "new_annual_depreciation",
+      "fieldtype": "Currency",
+      "label": "New Annual Depreciation",
+      "read_only": 1
+    },
+    {
+      "fieldname": "posting_status",
+      "fieldtype": "Select",
+      "label": "Posting Status",
+      "options": "Not Posted\nPosted",
+      "read_only": 1
+    },
+    {
+      "fieldname": "journal_entry",
+      "fieldtype": "Link",
+      "label": "Journal Entry",
+      "options": "Journal Entry",
+      "read_only": 1
+    },
+    {
+      "fieldname": "workflow_state",
+      "fieldtype": "Data",
+      "label": "Workflow State",
+      "hidden": 1
+    }
+  ],
+  "is_submittable": 1,
+  "permissions": [
+    {
+      "role": "System Manager",
+      "create": 1,
+      "read": 1,
+      "write": 1,
+      "delete": 1,
+      "submit": 1,
+      "print": 1,
+      "email": 1,
+      "report": 1,
+      "share": 1,
+      "export": 1
+    }
+  ]
+}
