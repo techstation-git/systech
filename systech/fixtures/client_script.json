@@ -1,0 +1,35 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Receipt",
+  "enabled": 1,
+  "modified": "2025-12-31 13:29:23.881804",
+  "module": "Systech",
+  "name": "Purchase Receipt",
+  "script": "// Purchase Receipt Client Script\n// Hides all price fields for Warehouse Keeper only\n// Admins and other roles are not affected\n\n// Helper function to check if user is Warehouse Keeper ONLY\nfunction is_warehouse_keeper_only() {\n    const excluded_roles = [\"System Manager\", \"Accounts Manager\", \"Purchase Manager\"];\n    // Only Warehouse Keeper, and NOT any of the excluded roles\n    return frappe.user.has_role(\"Warehouse Keeper\") \n        && !frappe.user_roles.some(r => excluded_roles.includes(r));\n}\n\n// Main function to hide fields\nfunction hide_prices_for_warehouse_keeper(frm) {\n    if (!is_warehouse_keeper_only()) return;\n\n    console.log(\"Warehouse Keeper: Applying strict field hiding...\");\n\n    const hidden_fields = [\n        // Parent totals\n        'base_discount_amount', 'base_grand_total', 'base_net_total',\n        'base_total', 'base_total_taxes_and_charges', 'discount_amount',\n        'grand_total', 'net_total', 'total', 'total_taxes_and_charges',\n        'taxes', 'buying_price_list', 'price_list_currency',\n        'plc_conversion_rate', 'currency', 'conversion_rate',\n        'total_qty', 'total_net_weight', 'rounding_adjustment',\n        'rounded_total', 'in_words',\n\n        // Child table pricing (Purchase Receipt Item)\n        'rate', 'amount', 'base_rate', 'base_amount',\n        'net_rate', 'net_amount', 'valuation_rate',\n        'price_list_rate', 'discount_percentage',\n        'rm_supp_cost', 'landed_cost_voucher_amount',\n        'margin_type', 'margin_rate_or_amount',\n        'rate_with_margin', 'billed_amt',\n        'amount_difference_with_purchase_invoice'\n    ];\n\n    // 1️⃣ Standard Frappe hide (form-level)\n    hidden_fields.forEach(f => {\n        frm.set_df_property(f, 'hidden', 1);\n    });\n\n    // 2️⃣ CSS injection (ensures UI hides even computed/DOM cells)\n    const selectors = hidden_fields.map(f => `\n        div[data-fieldname=\"${f}\"],\n        .form-group[data-fieldname=\"${f}\"],\n        .grid-row-cell[data-fieldname=\"${f}\"],\n        .grid-static-col[data-fieldname=\"${f}\"],\n        .grid-heading-row [data-fieldname=\"${f}\"],\n        .grid-row-open [data-fieldname=\"${f}\"],\n        .slide-sheet [data-fieldname=\"${f}\"],\n        td[data-fieldname=\"${f}\"],\n        th[data-fieldname=\"${f}\"],\n        .grid-body [data-fieldname=\"${f}\"],\n        .grid-footer [data-fieldname=\"${f}\"],\n        .ellipsis[data-fieldname=\"${f}\"],\n        span[data-fieldname=\"${f}\"]\n    `);\n\n    const css = selectors.join(\",\") + `\n        { \n            display: none !important;\n            visibility: hidden !important;\n            pointer-events: none !important;\n        }\n    `;\n\n    const style_id = 'warehouse-keeper-security';\n    $(`#${style_id}`).remove();\n    $('<style>')\n        .attr('id', style_id)\n        .prop('type', 'text/css')\n        .html(css)\n        .appendTo('head');\n}\n\n// Apply on standard form events\nfrappe.ui.form.on('Purchase Receipt', {\n    setup: function(frm) { hide_prices_for_warehouse_keeper(frm); },\n    onload: function(frm) { hide_prices_for_warehouse_keeper(frm); },\n    refresh: function(frm) { hide_prices_for_warehouse_keeper(frm); },\n    validate: function(frm) { hide_prices_for_warehouse_keeper(frm); },\n    after_save: function(frm) { hide_prices_for_warehouse_keeper(frm); }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Stock Entry",
+  "enabled": 1,
+  "modified": "2025-12-31 13:01:18.875349",
+  "module": "Systech",
+  "name": "Stock Entry",
+  "script": "/* Stock Entry Security */\nfrappe.ui.form.on('Stock Entry', {\n    refresh: function(frm) {\n        if (frappe.user.has_role(\"Warehouse Keeper\")) {\n            // Main Fields\n             ['total_amount', 'total_additional_costs', 'total_outgoing_value', \n              'total_incoming_value', 'value_difference', 'difference_amount']\n             .forEach(f => frm.set_df_property(f, 'hidden', 1));\n             \n            // Grid Columns\n            if(frm.fields_dict['items'] && frm.fields_dict['items'].grid) {\n                const grid = frm.fields_dict['items'].grid;\n                ['basic_rate', 'basic_amount', 'amount', 'valuation_rate', 'additional_cost']\n                .forEach(f => {\n                    grid.update_docfield_property(f, 'hidden', 1);\n                    grid.update_docfield_property(f, 'print_hide', 1);\n                    frm.$wrapper.find(`[data-fieldname=\"${f}\"]`).hide(); \n                });\n                 grid.refresh();\n            }\n        }\n    }\n});\n\n// Child Form View\nfrappe.ui.form.on('Stock Entry Detail', {\n    form_render: function(frm, cdt, cdn) {\n         if (frappe.user.has_role(\"Warehouse Keeper\")) {\n             const fields = ['basic_rate', 'basic_amount', 'amount', 'valuation_rate', 'additional_cost'];\n             fields.forEach(f => {\n                 $('.grid-row-open, .slide-sheet').find(`[data-fieldname=\"${f}\"]`).hide();\n             });\n         }\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Item",
+  "enabled": 1,
+  "modified": "2025-12-31 13:02:21.108564",
+  "module": "Systech",
+  "name": "Item",
+  "script": "/* Item Security */\nfrappe.ui.form.on('Item', {\n    refresh: function(frm) {\n        if (frappe.user.has_role(\"Warehouse Keeper\")) {\n            ['valuation_rate', 'standard_rate', 'last_purchase_rate', 'opening_stock_value']\n            .forEach(f => frm.set_df_property(f, 'hidden', 1));\n        }\n    }\n});",
+  "view": "Form"
+ }
+]
