@@ -137,13 +137,17 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Item": {
+		"validate": "systech.services.rest.validate_item_barcode"
+	},
+	"Purchase Receipt": {
+		"validate": "systech.services.rest.validate_transaction_barcodes"
+	},
+	"Stock Entry": {
+		"validate": "systech.services.rest.validate_transaction_barcodes"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
