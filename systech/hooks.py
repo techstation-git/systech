@@ -24,26 +24,9 @@ app_license = "mit"
 # Includes in <head>
 # ------------------
 
-# include js, css files in header of desk.html
-# app_include_css = "/assets/systech/css/systech.css"
-# app_include_js = "/assets/systech/js/systech.js"
-
-# include js, css files in header of web template
-# web_include_css = "/assets/systech/css/systech.css"
-# web_include_js = "/assets/systech/js/systech.js"
-
-# include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "systech/public/scss/website"
-
-# include js, css files in header of web form
-# webform_include_js = {"doctype": "public/js/doctype.js"}
-# webform_include_css = {"doctype": "public/css/doctype.css"}
-
-# include js in page
-# page_js = {"page" : "public/js/file.js"}
-
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -246,3 +229,8 @@ doc_events = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+	"Property Setter",
+    # "Custom Field",
+    "Client Script",
+]
