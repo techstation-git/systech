@@ -231,6 +231,6 @@ doc_events = {
 
 fixtures = [
 	"Property Setter",
-    # "Custom Field",
+    "Custom Field",
     "Client Script",
 ]
