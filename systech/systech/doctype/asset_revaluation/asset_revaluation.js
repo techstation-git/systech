@@ -22,6 +22,7 @@ frappe.ui.form.on('Asset Revaluation', {
                 }
             });
         }
+        
     },
     new_asset_value: function (frm) {
         if (frm.doc.new_asset_value != undefined) {
@@ -32,7 +33,7 @@ frappe.ui.form.on('Asset Revaluation', {
         }
     },
     new_remaining_life: function (frm) {
-        // Redundant logic removed as visibility is now handled by depends_on
+        
     },
     new_remaining_life_months: function (frm) {
         // Redundant logic removed as visibility is now handled by depends_on
