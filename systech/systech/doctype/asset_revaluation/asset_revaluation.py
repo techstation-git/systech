@@ -10,9 +10,7 @@ from frappe import _
 from frappe.utils import cstr, flt, getdate, nowdate
 from erpnext.assets.doctype.asset.asset import get_asset_value_after_depreciation
 from erpnext.assets.doctype.asset.depreciation import get_depreciation_accounts
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
-	make_new_active_asset_depr_schedules_and_cancel_current_ones,
-)
+
 
 
 
@@ -174,12 +172,47 @@ class AssetRevaluation(Document):
 			self.name, self.new_asset_value, life_text
 		)
 		
-		make_new_active_asset_depr_schedules_and_cancel_current_ones(
-			asset,
-			notes,
-			value_after_depreciation=asset.value_after_depreciation,
-			ignore_booked_entry=True
+		self.update_existing_asset_depr_schedules(asset, notes)
+
+	def update_existing_asset_depr_schedules(self, asset, notes):
+		# Find active schedules
+		schedules = frappe.get_all("Asset Depreciation Schedule", 
+			filters={"asset": asset.name, "status": "Active"}, 
+			pluck="name"
 		)
+		
+		for schedule_name in schedules:
+			schedule_doc = frappe.get_doc("Asset Depreciation Schedule", schedule_name)
+			
+			# Get the corresponding finance book row from asset
+			fb_row = None
+			if asset.finance_books:
+				for fb in asset.finance_books:
+					if fb.finance_book == schedule_doc.finance_book:
+						fb_row = fb
+						break
+				if not fb_row:
+					fb_row = asset.finance_books[0]
+			
+			if fb_row:
+				# Update schedule doc fields to match new asset state
+				schedule_doc.total_number_of_depreciations = fb_row.total_number_of_depreciations
+				schedule_doc.frequency_of_depreciation = fb_row.frequency_of_depreciation
+				schedule_doc.expected_value_after_useful_life = fb_row.expected_value_after_useful_life
+				
+				# Update notes
+				if schedule_doc.notes:
+					schedule_doc.notes += "\n" + notes
+				else:
+					schedule_doc.notes = notes
+					
+				# Regenerate unbooked rows
+				schedule_doc.make_depr_schedule(asset, fb_row, value_after_depreciation=asset.value_after_depreciation)
+				schedule_doc.set_accumulated_depreciation(asset, fb_row, ignore_booked_entry=True)
+				
+				schedule_doc.flags.ignore_permissions = True
+				schedule_doc.flags.ignore_validate_update_after_submit = True
+				schedule_doc.save()
 
 @frappe.whitelist()
 def get_asset_details(asset):
