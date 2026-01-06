@@ -121,9 +121,9 @@ app_license = "mit"
 # Hook on document methods and events
 
 doc_events = {
-	"Item": {
-		"validate": "systech.services.rest.validate_item_barcode"
-	},
+	# "Item": {
+	# 	"validate": "systech.services.rest.validate_item_barcode"
+	# },
 	"Purchase Receipt": {
 		"validate": "systech.services.rest.validate_transaction_barcodes"
 	},
