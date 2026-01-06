@@ -233,4 +233,5 @@ fixtures = [
 	"Property Setter",
     "Custom Field",
     "Client Script",
+	"Print Format"
 ]

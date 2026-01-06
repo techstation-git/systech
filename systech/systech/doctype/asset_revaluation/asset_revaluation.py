@@ -309,20 +309,35 @@ class AssetRevaluation(Document):
 				#    Monthly Depr = New Base / (New Total Remaining / frequency).
 				
 				pres_depr_sum = sum(flt(d.depreciation_amount) for d in preserved_rows)
-				# Use asset.gross_purchase_amount as the anchor for "Original Cost" concept
-				nbv_at_cutoff = flt(asset.gross_purchase_amount) - pres_depr_sum
-				new_base_at_cutoff = nbv_at_cutoff + flt(self.revaluation_difference)
+				
+				# CORRECT CALCULATION OF BASE VALUE AT CUTOFF
+				# We know fb_row.value_after_depreciation HAS BEEN UPDATED to include the NEW ADJUSTMENT.
+				# It represents the Asset Value "Now" (technically after the last booked depreciation + adjustment).
+				# However, we are splicing. Some preserved_rows might be UNBOOKED (Future relative to last booking, but Past relative to Cutoff).
+				# We need the value at the exact moment of Cutoff.
+				# Value @ Cutoff = (Value After Last Booked + Adjustment) - (Unbooked Preserved Depreciation).
+				
+				# Identify unbooked preserved depreciation
+				unbooked_pres_depr = 0
+				for d in preserved_rows:
+					if not d.journal_entry:
+						unbooked_pres_depr += flt(d.depreciation_amount)
+						
+				# fb_row.value_after_depreciation tracks (Book Value + Adjustment).
+				# But wait, fb_row.value_after_depreciation is usually updated by depreciation entries.
+				# If we have unbooked entries, the FB value hasn't been reduced by them yet.
+				# So fb_row.value_after_depreciation = (Last Booked Value) + (Adjustment).
+				# So Value @ Cutoff = fb_row.value_after_depreciation - unbooked_pres_depr.
+				
+				current_val_with_adjustment = flt(fb_row.value_after_depreciation)
+				new_base_at_cutoff = current_val_with_adjustment - unbooked_pres_depr
 				
 				# Determine number of periods already covered
 				periods_covered = len(preserved_rows)
 				
 				# Calculate new remaining periods
-				# Original Total periods = fb_row.total_number_of_depreciations (This was UPDATED in update_asset to include the increase!)
-				# So we need to subtract the *increase* to get the "original" before this transaction?
-				# Yes, in `update_asset`, we did: `fb_row.total_number_of_depreciations += additional_depreciations`
-				
-				# So:
-				# Current Total (Updated) - Consumed (Preserved) = Remaining (Updated).
+				# Original Total periods = fb_row.total_number_of_depreciations (This was UPDATED in update_asset!)
+				# So remaining periods = Total (Updated) - Covered (Preserved).
 				
 				remaining_periods = flt(fb_row.total_number_of_depreciations) - periods_covered
 				
@@ -454,10 +469,19 @@ def get_asset_details(asset):
 	useful_life_years = total_months / 12.0
 	
 	# Calculate Accumulated Depreciation
-	# Best way: Gross Purchase Amount - Value After Depreciation (Current Value in Finance Book)
-	# This accounts for any adjustments, manuals, etc. better than summing schedule sometimes.
+	# We sum the depreciation amounts from the schedule (booked ones) to allow for revaluations (appreciation)
+	# without causing negative accumulated depreciation.
+	# "Accumulated Depreciation" should strictly be "Amount written off".
+	
+	accumulated_depreciation = frappe.db.sql("""
+		select sum(depreciation_amount) 
+		from `tabAsset Depreciation Schedule` ads 
+		join `tabDepreciation Schedule` ds on ds.parent = ads.name
+		where ads.asset=%s and ads.finance_book=%s and ads.status='Active'
+		and ds.journal_entry is not null and ds.journal_entry != ''
+	""", (asset_doc.name, fb_row.finance_book))[0][0] or 0.0
+	
 	value_after_depr = flt(fb_row.value_after_depreciation)
-	accumulated_depreciation = flt(asset_doc.gross_purchase_amount) - value_after_depr
 	
 	nbv = value_after_depr
 	
