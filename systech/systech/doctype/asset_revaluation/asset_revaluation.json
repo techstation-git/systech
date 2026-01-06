@@ -28,6 +28,7 @@
     "column_break_read_only",
     "total_useful_life",
     "remaining_useful_life",
+    "remaining_useful_life_months",
     "revaluation_difference",
     "revaluation_type",
     "new_annual_depreciation",
@@ -164,6 +165,12 @@
       "fieldname": "remaining_useful_life",
       "fieldtype": "Float",
       "label": "Remaining Useful Life",
+      "read_only": 1
+    },
+    {
+      "fieldname": "remaining_useful_life_months",
+      "fieldtype": "Float",
+      "label": "Remaining Useful Life (Months)",
       "read_only": 1
     },
     {
