@@ -7,7 +7,8 @@ frappe.ui.form.on('Asset Revaluation', {
             frappe.call({
                 method: "systech.systech.doctype.asset_revaluation.asset_revaluation.get_asset_details",
                 args: {
-                    asset: frm.doc.asset
+                    asset: frm.doc.asset,
+                    revaluation_date: frm.doc.revaluation_date || frappe.datetime.get_today()
                 },
                 callback: function (r) {
                     if (r.message) {
@@ -17,6 +18,7 @@ frappe.ui.form.on('Asset Revaluation', {
                         frm.set_value('total_useful_life', r.message.total_useful_life);
                         frm.set_value('accumulated_depreciation', r.message.accumulated_depreciation);
                         frm.set_value('net_book_value', r.message.net_book_value);
+                        frm.set_value('current_asset_value', r.message.current_asset_value);
                         frm.set_value('remaining_useful_life', r.message.remaining_useful_life);
                         frm.set_value('remaining_useful_life_months', r.message.remaining_useful_life_months);
                         frm.trigger('calculate_new_annual_depreciation');
@@ -25,6 +27,11 @@ frappe.ui.form.on('Asset Revaluation', {
             });
         }
 
+    },
+    revaluation_date: function (frm) {
+        if (frm.doc.asset) {
+            frm.trigger('asset');
+        }
     },
     new_asset_value: function (frm) {
         if (frm.doc.new_asset_value != undefined) {

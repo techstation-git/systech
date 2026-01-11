@@ -7,7 +7,7 @@ from frappe.utils import flt
 
 
 from frappe import _
-from frappe.utils import cstr, flt, getdate, nowdate, add_months, get_last_day, cint
+from frappe.utils import cstr, flt, getdate, nowdate, add_months, get_last_day, cint, date_diff, add_days
 from frappe.utils.data import is_last_day_of_the_month
 from erpnext.assets.doctype.asset.asset import get_asset_value_after_depreciation
 from erpnext.assets.doctype.asset.depreciation import get_depreciation_accounts
@@ -93,7 +93,7 @@ class AssetRevaluation(Document):
 		# If revaluation_difference > 0 (Gain), Credit Revaluation Reserve/Gain. Debit Asset.
 		# If revaluation_difference < 0 (Loss), Debit Loss Account. Credit Asset.
 		
-		account_for_difference = depreciation_expense_account # Placeholder, strictly speaking should be separate.
+		account_for_difference = self.revaluation_account
 
 		je = frappe.new_doc("Journal Entry")
 		je.voucher_type = "Depreciation Entry"
@@ -238,77 +238,73 @@ class AssetRevaluation(Document):
 					
 				# Splicing Logic
 				# 1. Identify Cutoff
-				cutoff_date = self.revaluation_date
+				cutoff_date = self.effective_from_date or self.revaluation_date
 				
 				# 2. Separate Preserved vs To-Be-Regenerated
 				preserved_rows = []
-				for row in schedule_doc.get("depreciation_schedule"):
-					# Keep if schedule date is BEFORE revaluation date
-					# Note: depreciation entries are usually Month End. 
-					# If Revaluation is 15th Jan, and Schedule is 31st Jan. 
-					# 31st Jan row > 15th Jan. It should be replaced/recalculated?
-					# Yes, effective date determines when the new value applies.
+				# Check for straddle
+				# We iterate and find the first row that intersects or is after cutoff
+				
+				# Helper to get start date of a row
+				def get_row_start_date(rows, idx, asset_start_date):
+					if idx == 0:
+						return asset_start_date
+					return add_days(rows[idx-1].schedule_date, 1)
+
+				original_rows = schedule_doc.get("depreciation_schedule")
+				straddle_row_idx = -1
+				
+				for i, row in enumerate(original_rows):
 					if getdate(row.schedule_date) < getdate(cutoff_date):
 						preserved_rows.append(row)
+					else:
+						# This row ends after or on cutoff.
+						# Check start date
+						row_start = get_row_start_date(original_rows, i, asset.available_for_use_date)
+						if getdate(row_start) < getdate(cutoff_date):
+							# Straddle detected
+							straddle_row_idx = i
+						break
+
+				# Handle Straddle
+				first_target_date = None
 				
-				# 3. Calculate state at cutoff
-				accumulated_depr_at_cutoff = sum(flt(d.depreciation_amount) for d in preserved_rows)
-				# We use the original Gross Purchase Amount (or previous value) for base?
-				# Asset Value = Gross - Accumulated
-				# Ideally we want: Current Value Before Revaluation (+ any previous adjustments) - Depreciation so far
-				# But simpler: Net Book Value at cutoff.
-				# We can rely on Asset's gross purchase amount if no other revaluations happened.
-				# If other revaluations happened, they modified 'value_after_depreciation' or 'gross_purchase_amount'.
-				# Wait, Asset.value_after_depreciation tracks the *current* Book Value in ERPNext.
-				# But if Future, Asset.value_after_depreciation might be "Current" (Now), not "Future" (Cutoff).
+				if straddle_row_idx != -1:
+					row = original_rows[straddle_row_idx]
+					row_start = getdate(get_row_start_date(original_rows, straddle_row_idx, asset.available_for_use_date))
+					row_end = getdate(row.schedule_date)
+					cutoff = getdate(cutoff_date)
+					
+					# Create Old Part (Start -> Cutoff - 1)
+					old_part_end = add_days(cutoff, -1)
+					
+					# Calculate days
+					total_days = date_diff(row_end, row_start) + 1
+					old_days = date_diff(old_part_end, row_start) + 1
+					
+					if old_days > 0 and total_days > 0:
+						fraction = flt(old_days) / flt(total_days)
+						old_amount = flt(row.depreciation_amount) * fraction
+						
+						# Create a transient row object (dict)
+						preserved_rows.append(frappe._dict({
+							"schedule_date": old_part_end,
+							"depreciation_amount": old_amount,
+							"accumulated_depreciation_amount": 0.0, # Will be recalculated
+							"journal_entry": row.journal_entry if row.journal_entry else "" # Keep JE if exists? Unlikely for straddle partial.
+						}))
+					
+					# The New Part will be the first row of generation
+					# Target date should be the original row end
+					first_target_date = row.schedule_date
+
+				# Re-calculate accumulated for preserved rows to ensure consistency
+				running_accum = 0.0
+				for p in preserved_rows:
+					running_accum += flt(p.depreciation_amount)
+					p.accumulated_depreciation_amount = running_accum
 				
-				# Let's derive from Finance Book Row data which we supposedly trust.
-				# fb_row.value_after_depreciation is the current NBV.
-				# But that reflects ALL booked entries? No, it reflects the state "now".
-				# If revaluation is in future, we must project.
-				
-				# Better approach:
-				# Base Value = Gross Purchase Amount - Accumulated Depr (Preserved)
-				# But Gross Purchase Amount might have changed if multiple revaluations.
-				# Let's use the first schedule row's logic? No.
-				
-				# Let's use:
-				# Value at Cutoff = (Asset Gross Purchase Amount) - (Sum of Preserved Depreciation)
-				# Note: Gross Purchase Amount in ERPNext includes capitalized costs/revaluations usually? 
-				# Actually revaluation modifies 'value_after_depreciation' usually, not gross.
-				# Checking `update_asset`: we modified `fb_row.value_after_depreciation`.
-				# And `asset.value_after_depreciation`.
-				
-				# If we are in "Future" scenario, our `update_asset` earlier changed the NBV *Now*.
-				# That might be technically incorrect if the revaluation is effective in future?
-				# If I say "Revalue in 2026", but I change `asset.value_after_depreciation` NOW (2025),
-				# then the asset value is immediately up.
-				# But the depreciation for 2025 should be on old value...
-				# If I changed `value_after_depreciation` globally, standard ERPNext logic would immediately use it for next schedule.
-				
-				# This implies my `update_asset` logic (Step 1 of this whole process) might be too aggressive for Future Revaluation.
-				# However, users usually want to record the "Event" now.
-				# If we strictly want "Old Rate until Date X":
-				# The generated schedule rows for the interval (Now -> Date X) MUST use the OLD value/rate.
-				# The rows after Date X use the NEW value/rate.
-				
-				# To achieve this:
-				# 1. Calculate `value_at_start_of_period` for the NEW segment.
-				#    Preserved Rows sum = Depreciation booked/planned so far.
-				#    Original Cost = asset.gross_purchase_amount (assuming it's the anchor).
-				#    NBV at Cutoff = Original Cost - Preserved Sum.
-				#    New Base = NBV at Cutoff + self.revaluation_difference.
-				
-				# 2. Make new rows.
-				#    Remaining Life = ??
-				#    Original Total Life (Months).
-				#    Used Life (Months) = len(preserved_rows) * frequency.
-				#    Remaining Original Life = Total - Used.
-				#    New Total Remaining = Remaining Original + Additional Life.
-				
-				#    Monthly Depr = New Base / (New Total Remaining / frequency).
-				
-				pres_depr_sum = sum(flt(d.depreciation_amount) for d in preserved_rows)
+				pres_depr_sum = running_accum
 				
 				# CORRECT CALCULATION OF BASE VALUE AT CUTOFF
 				# We know fb_row.value_after_depreciation HAS BEEN UPDATED to include the NEW ADJUSTMENT.
@@ -341,10 +337,9 @@ class AssetRevaluation(Document):
 				
 				remaining_periods = flt(fb_row.total_number_of_depreciations) - periods_covered
 				
-				if remaining_periods <= 0:
-					# Edge case: extended life but maybe not enough?
-					pass
-					
+				if straddle_row_idx != -1:
+					remaining_periods += 1
+				
 				# Generate new rows
 				new_rows = []
 				start_date = preserved_rows[-1].schedule_date if preserved_rows else asset.available_for_use_date
@@ -356,12 +351,6 @@ class AssetRevaluation(Document):
 				# Depreciable Amount for the FUTURE section
 				depreciable_amt = new_base_at_cutoff - final_value
 				
-				# Depreciation per period
-				if remaining_periods > 0:
-					amt_per_period = depreciable_amt / remaining_periods
-				else:
-					amt_per_period = 0
-					
 				current_date = getdate(start_date)
 				frequency_months = cint(fb_row.frequency_of_depreciation)
 				
@@ -370,43 +359,60 @@ class AssetRevaluation(Document):
 				
 				accumulated_depr = pres_depr_sum
 				
+				# Phase 1: Generate Dates
+				generated_dates = []
 				for i in range(cint(remaining_periods)):
-					# Next date
-					# If preserved_rows exists, we add to last one.
-					# If not, we add to available_for_use_date?
-					# Be careful with the first jump.
+					if i == 0 and first_target_date:
+						next_date = first_target_date
+					else:
+						next_date = add_months(current_date, frequency_months)
+						if is_last_day_of_the_month(current_date):
+							next_date = get_last_day(next_date)
 					
-					# If we have preserved rows, the next one is 1 frequency after the last one.
-					next_date = add_months(current_date, frequency_months)
-					if is_last_day_of_the_month(current_date):
-						next_date = get_last_day(next_date)
-						
+					generated_dates.append(next_date)
 					current_date = next_date
+				
+				# Phase 2: Calculate Total Days
+				total_days_remaining = 0
+				
+				# CORRECT DAY COUNTING
+				# We must sum the days of each interval.
+				# Interval 1: Start -> Date[0]
+				# Interval 2: Date[0] -> Date[1]
+				# ...
+				
+				temp_start = getdate(start_date)
+				if generated_dates:
+					total_duration_days = date_diff(generated_dates[-1], temp_start)
+				else:
+					total_duration_days = 0
+
+				daily_rate = 0
+				if total_duration_days > 0:
+					daily_rate = depreciable_amt / total_duration_days
+				
+				# Phase 3: Create Rows
+				current_start = getdate(start_date)
+				for i, date_val in enumerate(generated_dates):
+					days = date_diff(date_val, current_start)
+					d_amt = flt(daily_rate * days, precision)
 					
-					# Amount
-					# Last row adjustment?
-					d_amt = flt(amt_per_period, precision)
-					
-					# Check for last row rounding to match expected value
-					if i == cint(remaining_periods) - 1:
-						# Ensure we hit the exact value
-						# Remaining value = New Base - Accumulated (New Section Only?) 
-						# Actually simpler: Total Goal = New Base. 
-						# We have depreciated: Accumulated So Far + Sum of New Rows so far.
-						# This entry should bridge the gap to expected_value.
-						
-						current_value_before_this = new_base_at_cutoff - (flt(accumulated_depr) - pres_depr_sum)
-						d_amt = current_value_before_this - final_value
+					# Adjust last row
+					if i == len(generated_dates) - 1:
+						# Balance
+						current_val_before = new_base_at_cutoff - (flt(accumulated_depr) - pres_depr_sum)
+						d_amt = current_val_before - final_value
 						d_amt = flt(d_amt, precision)
 					
 					accumulated_depr += d_amt
 					
 					new_rows.append({
-						"schedule_date": current_date,
+						"schedule_date": date_val,
 						"depreciation_amount": d_amt,
 						"accumulated_depreciation_amount": flt(accumulated_depr, precision),
 						"journal_entry": ""
 					})
+					current_start = date_val
 
 				# 4. Reconstruct Schedule
 				# Clear existing
@@ -430,7 +436,7 @@ class AssetRevaluation(Document):
 				schedule_doc.save()
 
 @frappe.whitelist()
-def get_asset_details(asset):
+def get_asset_details(asset, revaluation_date=None):
 	asset_doc = frappe.get_doc("Asset", asset)
 	
 	# Get Finance Book details (assuming defaults or first one)
@@ -447,10 +453,14 @@ def get_asset_details(asset):
 	if not fb_row:
 		# Fallback if no finance book exists
 		# Approximate accumulated depreciation if possible, else 0
-		accumulated_depreciation = frappe.db.sql("""
+		cond = ""
+		if revaluation_date:
+			cond = f"and schedule_date < '{revaluation_date}'"
+
+		accumulated_depreciation = frappe.db.sql(f"""
 			select sum(depreciation_amount) 
 			from `tabDepreciation Schedule` 
-			where parent=%s and parenttype='Asset' and docstatus=1
+			where parent=%s and parenttype='Asset' and docstatus=1 {cond}
 		""", asset)[0][0] or 0.0
 		
 		return {
@@ -458,6 +468,7 @@ def get_asset_details(asset):
 			"original_cost": asset_doc.total_asset_cost,
 			"accumulated_depreciation": accumulated_depreciation,
 			"net_book_value": flt(asset_doc.total_asset_cost) - flt(accumulated_depreciation),
+			"current_asset_value": flt(asset_doc.total_asset_cost) - flt(accumulated_depreciation),
 			"depreciation_method": "",
 			"total_useful_life": 0,
 			"remaining_useful_life": 0,
@@ -473,17 +484,40 @@ def get_asset_details(asset):
 	# without causing negative accumulated depreciation.
 	# "Accumulated Depreciation" should strictly be "Amount written off".
 	
+	# 1. Calculate Booked Accumulated Depreciation (Static / Current State)
 	accumulated_depreciation = frappe.db.sql("""
-		select sum(depreciation_amount) 
+		select sum(ds.depreciation_amount) 
 		from `tabAsset Depreciation Schedule` ads 
 		join `tabDepreciation Schedule` ds on ds.parent = ads.name
 		where ads.asset=%s and ads.finance_book=%s and ads.status='Active'
 		and ds.journal_entry is not null and ds.journal_entry != ''
 	""", (asset_doc.name, fb_row.finance_book))[0][0] or 0.0
 	
-	value_after_depr = flt(fb_row.value_after_depreciation)
+	# 2. Calculate Projected Value at Revaluation Date (Dynamic)
+	# We use the schedule to find what the value WOULD be at the revaluation date
+	# (Cost - Depreciation scheduled up to that date).
 	
-	nbv = value_after_depr
+	cond = ""
+	if revaluation_date:
+		cond = f"and ds.schedule_date < '{revaluation_date}'"
+	else:
+		cond = f"and ds.schedule_date < '{nowdate()}'"
+
+	projected_accum_depr = frappe.db.sql(f"""
+		select sum(ds.depreciation_amount) 
+		from `tabAsset Depreciation Schedule` ads 
+		join `tabDepreciation Schedule` ds on ds.parent = ads.name
+		where ads.asset=%s and ads.finance_book=%s and ads.status='Active'
+		{cond}
+	""", (asset_doc.name, fb_row.finance_book))[0][0] or 0.0
+	
+	current_asset_value = flt(asset_doc.total_asset_cost) - flt(projected_accum_depr)
+	
+	# Maintain original return structure for other fields
+	value_after_depr = flt(fb_row.value_after_depreciation)
+	nbv = value_after_depr # Default logic returned this
+	
+	# But for the new field, we use our calculated one
 	
 	# Calculate Remaining Life
 	# Total Depreciations - Booked Depreciations
@@ -506,6 +540,7 @@ def get_asset_details(asset):
 		"total_useful_life": useful_life_years,
 		"accumulated_depreciation": accumulated_depreciation,
 		"net_book_value": nbv,
+		"current_asset_value": current_asset_value,
 		"remaining_useful_life": remaining_years,
 		"remaining_useful_life_months": remaining_months
 	}
