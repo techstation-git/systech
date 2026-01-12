@@ -111,7 +111,7 @@ class AssetRevaluation(Document):
 		
 		# Debit/Credit Logic
 		# Increase Value: Debit Asset, Credit Difference Account
-		# Decrease Value: Debit Difference Account, Credit Asset
+		
 		
 		entry_template = {
 			"cost_center": asset.cost_center or depreciation_cost_center,
