@@ -32,6 +32,7 @@ class AssetRevaluation(Document):
 		if self.new_asset_value < 0:
 			frappe.throw(_("New Asset Value cannot be negative"))
 
+
 	def calculate_difference(self):
 		if self.new_asset_value is not None:
 			self.revaluation_difference = flt(self.new_asset_value)
@@ -391,6 +392,12 @@ class AssetRevaluation(Document):
 				if total_duration_days > 0:
 					daily_rate = depreciable_amt / total_duration_days
 				
+				# Pre-map existing Journal Entries by Date to preserve them
+				booked_je_map = {}
+				for r in original_rows:
+					if r.journal_entry:
+						 booked_je_map[getdate(r.schedule_date)] = r.journal_entry
+
 				# Phase 3: Create Rows
 				current_start = getdate(start_date)
 				for i, date_val in enumerate(generated_dates):
@@ -406,11 +413,15 @@ class AssetRevaluation(Document):
 					
 					accumulated_depr += d_amt
 					
+					# Check if this date was previously booked
+					# If so, restore the JE link and preserve its specific date match if needed
+					existing_je = booked_je_map.get(getdate(date_val), "")
+
 					new_rows.append({
 						"schedule_date": date_val,
 						"depreciation_amount": d_amt,
 						"accumulated_depreciation_amount": flt(accumulated_depr, precision),
-						"journal_entry": ""
+						"journal_entry": existing_je
 					})
 					current_start = date_val
 
