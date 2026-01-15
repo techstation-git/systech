@@ -1,0 +1,2879 @@
+[
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 13:55:35.938845",
+  "name": "ehfqgedljb",
+  "permitted_roles": [
+   {
+    "parent": "ehfqgedljb",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "ehcetdk3b2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:00:40.306856",
+  "name": "hgjkbbujr2",
+  "permitted_roles": [
+   {
+    "parent": "hgjkbbujr2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "hgg6degvef",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:00:45.448672",
+  "name": "hi66fp3dvh",
+  "permitted_roles": [
+   {
+    "parent": "hi66fp3dvh",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "hgg6degvef",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:06:10.123166",
+  "name": "knl7npm03s",
+  "permitted_roles": [
+   {
+    "parent": "knl7npm03s",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "hgg6degvef",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:14:42.938399",
+  "name": "pntt5tqdqt",
+  "permitted_roles": [
+   {
+    "parent": "pntt5tqdqt",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "pnq3le16r8",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:14:45.603493",
+  "name": "poomf2je94",
+  "permitted_roles": [
+   {
+    "parent": "poomf2je94",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "pnq3le16r8",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:14:48.355662",
+  "name": "ppjlqttulc",
+  "permitted_roles": [
+   {
+    "parent": "ppjlqttulc",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "pnq3le16r8",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:24:48.078788",
+  "name": "vl1rbg3bah",
+  "permitted_roles": [
+   {
+    "parent": "vl1rbg3bah",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vkusnbp3su",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:24:50.809021",
+  "name": "vls12lvb8h",
+  "permitted_roles": [
+   {
+    "parent": "vls12lvb8h",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vkusnbp3su",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:24:53.324236",
+  "name": "vmllsn3bu6",
+  "permitted_roles": [
+   {
+    "parent": "vmllsn3bu6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vkusnbp3su",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:30:19.350866",
+  "name": "2sh51cnqh7",
+  "permitted_roles": [
+   {
+    "parent": "2sh51cnqh7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "2sgjq6eovi",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:30:57.468454",
+  "name": "38eq3pc4m7",
+  "permitted_roles": [
+   {
+    "parent": "38eq3pc4m7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "2sgjq6eovi",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 14:31:37.035672",
+  "name": "3kq8rju5ui",
+  "permitted_roles": [
+   {
+    "parent": "3kq8rju5ui",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "2sgjq6eovi",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:12:59.659271",
+  "name": "v1kdt4k8qs",
+  "permitted_roles": [
+   {
+    "parent": "v1kdt4k8qs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "v1ko4sdhue",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:13:24.115029",
+  "name": "v99d7c1t14",
+  "permitted_roles": [
+   {
+    "parent": "v99d7c1t14",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "v1ko4sdhue",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:13:26.479451",
+  "name": "va0g3b7vj6",
+  "permitted_roles": [
+   {
+    "parent": "va0g3b7vj6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "v1ko4sdhue",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:16:34.580944",
+  "name": "14p2hl5rfv",
+  "permitted_roles": [
+   {
+    "parent": "14p2hl5rfv",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "ehcetdk3b2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:16:38.279688",
+  "name": "15uqk2qq0a",
+  "permitted_roles": [
+   {
+    "parent": "15uqk2qq0a",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "ehcetdk3b2",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:25:35.341924",
+  "name": "6dpj0skg8u",
+  "permitted_roles": [
+   {
+    "parent": "6dpj0skg8u",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "6doohiofd2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:25:38.743536",
+  "name": "6ertgldi2v",
+  "permitted_roles": [
+   {
+    "parent": "6ertgldi2v",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "6doohiofd2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:25:41.078702",
+  "name": "6fikbp5su1",
+  "permitted_roles": [
+   {
+    "parent": "6fikbp5su1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "6doohiofd2",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:26:42.874309",
+  "name": "72sjfanuus",
+  "permitted_roles": [
+   {
+    "parent": "72sjfanuus",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "72rqcjv9n5",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:26:45.516344",
+  "name": "73nrrlgvgf",
+  "permitted_roles": [
+   {
+    "parent": "73nrrlgvgf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "72rqcjv9n5",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2025-12-29 16:26:47.310466",
+  "name": "749kcpa7ak",
+  "permitted_roles": [
+   {
+    "parent": "749kcpa7ak",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "72rqcjv9n5",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 13:27:48.579253",
+  "name": "p0ectp0lv9",
+  "permitted_roles": [
+   {
+    "parent": "p0ectp0lv9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "p0738hnvmk",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 13:27:52.504775",
+  "name": "p1ll57c3es",
+  "permitted_roles": [
+   {
+    "parent": "p1ll57c3es",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "p0738hnvmk",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 13:29:48.181631",
+  "name": "q5qkk7i49k",
+  "permitted_roles": [
+   {
+    "parent": "q5qkk7i49k",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q5ojnskb5v",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 13:29:51.289815",
+  "name": "q6pd0tksgs",
+  "permitted_roles": [
+   {
+    "parent": "q6pd0tksgs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q5ojnskb5v",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 13:31:46.969732",
+  "name": "rausag1941",
+  "permitted_roles": [
+   {
+    "parent": "rausag1941",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q5ojnskb5v",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:24:20.075131",
+  "name": "q49c4s3qd9",
+  "permitted_roles": [
+   {
+    "parent": "q49c4s3qd9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q46d272q04",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:24:24.486961",
+  "name": "q5l5b102id",
+  "permitted_roles": [
+   {
+    "parent": "q5l5b102id",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q46d272q04",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:24:27.831572",
+  "name": "q6mjoit5bg",
+  "permitted_roles": [
+   {
+    "parent": "q6mjoit5bg",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "q46d272q04",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:27:00.575466",
+  "name": "rmel9dd61j",
+  "permitted_roles": [
+   {
+    "parent": "rmel9dd61j",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "rm9jaif7ol",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:27:31.934566",
+  "name": "s075jbbulm",
+  "permitted_roles": [
+   {
+    "parent": "s075jbbulm",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "rm9jaif7ol",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-03 14:27:34.604331",
+  "name": "s12sd37qrv",
+  "permitted_roles": [
+   {
+    "parent": "s12sd37qrv",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "rm9jaif7ol",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:14:16.608363",
+  "name": "qkmhdgbl7r",
+  "permitted_roles": [
+   {
+    "parent": "qkmhdgbl7r",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qkjkk58b72",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:15:32.227925",
+  "name": "rcae7dmvmn",
+  "permitted_roles": [
+   {
+    "parent": "rcae7dmvmn",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qkjkk58b72",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:15:51.995805",
+  "name": "rigu0a5l2l",
+  "permitted_roles": [
+   {
+    "parent": "rigu0a5l2l",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qkjkk58b72",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:31:31.256034",
+  "name": "4o0rhisrq4",
+  "permitted_roles": [
+   {
+    "parent": "4o0rhisrq4",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4o0oi0a95i",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:32:05.901378",
+  "name": "52rbnr45k3",
+  "permitted_roles": [
+   {
+    "parent": "52rbnr45k3",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4o0oi0a95i",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 15:32:12.929533",
+  "name": "551q2m84u4",
+  "permitted_roles": [
+   {
+    "parent": "551q2m84u4",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4o0oi0a95i",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 16:04:41.637396",
+  "name": "o605hb2t15",
+  "permitted_roles": [
+   {
+    "parent": "o605hb2t15",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "o5ulo5bch3",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 16:04:45.749290",
+  "name": "o79q4sqarh",
+  "permitted_roles": [
+   {
+    "parent": "o79q4sqarh",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "o5ulo5bch3",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 16:05:53.282933",
+  "name": "oscntmmran",
+  "permitted_roles": [
+   {
+    "parent": "oscntmmran",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "o5ulo5bch3",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:00:00.808408",
+  "name": "oj8m80e41m",
+  "permitted_roles": [
+   {
+    "parent": "oj8m80e41m",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "oj68n5rtd5",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:31:38.289275",
+  "name": "b47o39ifmv",
+  "permitted_roles": [
+   {
+    "parent": "b47o39ifmv",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "b46u6mq9gg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:31:49.350822",
+  "name": "b7laeqehm9",
+  "permitted_roles": [
+   {
+    "parent": "b7laeqehm9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "b46u6mq9gg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:31:51.975794",
+  "name": "b8felpteq6",
+  "permitted_roles": [
+   {
+    "parent": "b8felpteq6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "b46u6mq9gg",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:33:57.259237",
+  "name": "cfkfppg257",
+  "permitted_roles": [
+   {
+    "parent": "cfkfppg257",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "cfjai5g251",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:34:08.560568",
+  "name": "cj5atfpcf4",
+  "permitted_roles": [
+   {
+    "parent": "cj5atfpcf4",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "cfjai5g251",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 17:34:16.499962",
+  "name": "clljrlhkn2",
+  "permitted_roles": [
+   {
+    "parent": "clljrlhkn2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "cfjai5g251",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 20:22:15.857906",
+  "name": "f3e0qvp4sg",
+  "permitted_roles": [
+   {
+    "parent": "f3e0qvp4sg",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "f3d21gcbue",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 20:22:18.140594",
+  "name": "f4517qpb6s",
+  "permitted_roles": [
+   {
+    "parent": "f4517qpb6s",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "f3d21gcbue",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-06 20:22:30.704135",
+  "name": "f835k0ncr2",
+  "permitted_roles": [
+   {
+    "parent": "f835k0ncr2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "f3d21gcbue",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:17:13.307735",
+  "name": "bbtoecp9u7",
+  "permitted_roles": [
+   {
+    "parent": "bbtoecp9u7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bbprbfu0d0",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:17:15.889922",
+  "name": "bcnjqee111",
+  "permitted_roles": [
+   {
+    "parent": "bcnjqee111",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bbprbfu0d0",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:17:40.329891",
+  "name": "bkbvgp9for",
+  "permitted_roles": [
+   {
+    "parent": "bkbvgp9for",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bbprbfu0d0",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:23:57.198180",
+  "name": "fa4ltfm1vo",
+  "permitted_roles": [
+   {
+    "parent": "fa4ltfm1vo",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fa26rhtnq2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:24:08.089927",
+  "name": "fdh504shdk",
+  "permitted_roles": [
+   {
+    "parent": "fdh504shdk",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fa26rhtnq2",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-10 15:24:11.712977",
+  "name": "fel8gbsg1v",
+  "permitted_roles": [
+   {
+    "parent": "fel8gbsg1v",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fa26rhtnq2",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:33:30.989889",
+  "name": "dndldn02sl",
+  "permitted_roles": [
+   {
+    "parent": "dndldn02sl",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "dnd4so6abh",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:33:31.062431",
+  "name": "dneeur66h6",
+  "permitted_roles": [
+   {
+    "parent": "dneeur66h6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "dnd4so6abh",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:37:12.445279",
+  "name": "fsk0i36c8e",
+  "permitted_roles": [
+   {
+    "parent": "fsk0i36c8e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fsj77gqglg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:37:12.505799",
+  "name": "fsl358sqvu",
+  "permitted_roles": [
+   {
+    "parent": "fsl358sqvu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fsj77gqglg",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:38:00.718275",
+  "name": "gbnnckk1tm",
+  "permitted_roles": [
+   {
+    "parent": "gbnnckk1tm",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "gbmkm8nmum",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:38:00.771345",
+  "name": "gbnbi36i6n",
+  "permitted_roles": [
+   {
+    "parent": "gbnbi36i6n",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "gbmkm8nmum",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:53:12.666732",
+  "name": "p8mm9ao09m",
+  "permitted_roles": [
+   {
+    "parent": "p8mm9ao09m",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "p8l64fn7hr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:53:16.035203",
+  "name": "p9o2ip7gvq",
+  "permitted_roles": [
+   {
+    "parent": "p9o2ip7gvq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "p8l64fn7hr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:53:19.319117",
+  "name": "papeaeupij",
+  "permitted_roles": [
+   {
+    "parent": "papeaeupij",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "p8l64fn7hr",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:55:57.841126",
+  "name": "qsaasmcksf",
+  "permitted_roles": [
+   {
+    "parent": "qsaasmcksf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qsaerepu78",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:55:59.771379",
+  "name": "qst4f9eupv",
+  "permitted_roles": [
+   {
+    "parent": "qst4f9eupv",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qsaerepu78",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 09:56:02.245145",
+  "name": "qtm6uas0mk",
+  "permitted_roles": [
+   {
+    "parent": "qtm6uas0mk",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "qsaerepu78",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:01:49.765368",
+  "name": "ua9ctlb3jl",
+  "permitted_roles": [
+   {
+    "parent": "ua9ctlb3jl",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "ua9i23id96",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:01:49.796268",
+  "name": "ua90aqm4t9",
+  "permitted_roles": [
+   {
+    "parent": "ua90aqm4t9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "ua9i23id96",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:02:52.322244",
+  "name": "utraink5i5",
+  "permitted_roles": [
+   {
+    "parent": "utraink5i5",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "utrn4r4beb",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:02:52.349986",
+  "name": "utr5ngb33c",
+  "permitted_roles": [
+   {
+    "parent": "utr5ngb33c",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "utrn4r4beb",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:04:08.594829",
+  "name": "vlldh6itrn",
+  "permitted_roles": [
+   {
+    "parent": "vlldh6itrn",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vllbtvoe0h",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:04:08.637044",
+  "name": "vlmk5aminc",
+  "permitted_roles": [
+   {
+    "parent": "vlmk5aminc",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vllbtvoe0h",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:04:40.873806",
+  "name": "vvopbkjk4e",
+  "permitted_roles": [
+   {
+    "parent": "vvopbkjk4e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vvofkgdjkm",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:04:40.909291",
+  "name": "vvp8r4st99",
+  "permitted_roles": [
+   {
+    "parent": "vvp8r4st99",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "vvofkgdjkm",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:07:49.519473",
+  "name": "1qnuv2mvqj",
+  "permitted_roles": [
+   {
+    "parent": "1qnuv2mvqj",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "1qmkucd93h",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:07:51.369633",
+  "name": "1r97vt5ld0",
+  "permitted_roles": [
+   {
+    "parent": "1r97vt5ld0",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "1qmkucd93h",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:07:53.206268",
+  "name": "1rsmqfenfo",
+  "permitted_roles": [
+   {
+    "parent": "1rsmqfenfo",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "1qmkucd93h",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:00.931805",
+  "name": "499j1k4942",
+  "permitted_roles": [
+   {
+    "parent": "499j1k4942",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4999fpiqv1",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:00.962932",
+  "name": "499oh39pdc",
+  "permitted_roles": [
+   {
+    "parent": "499oh39pdc",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4999fpiqv1",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:26.035496",
+  "name": "4h4i9ef04u",
+  "permitted_roles": [
+   {
+    "parent": "4h4i9ef04u",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4h4o02i9q6",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:26.066493",
+  "name": "4h47lrr7k6",
+  "permitted_roles": [
+   {
+    "parent": "4h47lrr7k6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4h4o02i9q6",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:56.840317",
+  "name": "4qo6fo20u7",
+  "permitted_roles": [
+   {
+    "parent": "4qo6fo20u7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4qoginjm9d",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:12:56.869893",
+  "name": "4qor7j0fi7",
+  "permitted_roles": [
+   {
+    "parent": "4qor7j0fi7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "4qoginjm9d",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:13:30.570570",
+  "name": "559eb7ij9f",
+  "permitted_roles": [
+   {
+    "parent": "559eb7ij9f",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "5595627j8a",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:13:30.602430",
+  "name": "55alfbnt7v",
+  "permitted_roles": [
+   {
+    "parent": "55alfbnt7v",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "5595627j8a",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:21:16.843287",
+  "name": "9n0ouv2rq3",
+  "permitted_roles": [
+   {
+    "parent": "9n0ouv2rq3",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "9mvibj7jsr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:21:19.333309",
+  "name": "9npqiogpnq",
+  "permitted_roles": [
+   {
+    "parent": "9npqiogpnq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "9mvibj7jsr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 10:22:20.867758",
+  "name": "ab0l8kk1vg",
+  "permitted_roles": [
+   {
+    "parent": "ab0l8kk1vg",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "9mvibj7jsr",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:39:30.673063",
+  "name": "10qt39jjf3",
+  "permitted_roles": [
+   {
+    "parent": "10qt39jjf3",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "10ocjooqbn",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:39:50.953586",
+  "name": "1752j7p1b6",
+  "permitted_roles": [
+   {
+    "parent": "1752j7p1b6",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "10ocjooqbn",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:39:53.427131",
+  "name": "17u8vhkkjn",
+  "permitted_roles": [
+   {
+    "parent": "17u8vhkkjn",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "10ocjooqbn",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:41:36.867005",
+  "name": "288ht0d22e",
+  "permitted_roles": [
+   {
+    "parent": "288ht0d22e",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "288fii642e",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:41:59.358075",
+  "name": "2f955466v1",
+  "permitted_roles": [
+   {
+    "parent": "2f955466v1",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "288fii642e",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:42:01.677607",
+  "name": "2g04bts9qq",
+  "permitted_roles": [
+   {
+    "parent": "2g04bts9qq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "288fii642e",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:57:48.466156",
+  "name": "bns6hk6i4d",
+  "permitted_roles": [
+   {
+    "parent": "bns6hk6i4d",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bns835jp6e",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:58:19.149803",
+  "name": "c1fsfkqsbs",
+  "permitted_roles": [
+   {
+    "parent": "c1fsfkqsbs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bns835jp6e",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:58:21.306717",
+  "name": "c25ucpdr0p",
+  "permitted_roles": [
+   {
+    "parent": "c25ucpdr0p",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bns835jp6e",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:59:43.350090",
+  "name": "crpl45t6mt",
+  "permitted_roles": [
+   {
+    "parent": "crpl45t6mt",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "crpbuu39gq",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 14:59:46.225249",
+  "name": "csm5uo4ure",
+  "permitted_roles": [
+   {
+    "parent": "csm5uo4ure",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "crpbuu39gq",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-11 15:00:11.929329",
+  "name": "d4n38gnral",
+  "permitted_roles": [
+   {
+    "parent": "d4n38gnral",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "crpbuu39gq",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:37:19.770495",
+  "name": "kutul855gm",
+  "permitted_roles": [
+   {
+    "parent": "kutul855gm",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "kutbof9cp9",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:37:19.809925",
+  "name": "kuu0dgkg9o",
+  "permitted_roles": [
+   {
+    "parent": "kuu0dgkg9o",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "kutbof9cp9",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:43:17.250527",
+  "name": "oek9m3grgr",
+  "permitted_roles": [
+   {
+    "parent": "oek9m3grgr",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "oek4007vno",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:43:17.275991",
+  "name": "oek88vcmg9",
+  "permitted_roles": [
+   {
+    "parent": "oek88vcmg9",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "oek4007vno",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:51:51.566361",
+  "name": "tfbh773nlb",
+  "permitted_roles": [
+   {
+    "parent": "tfbh773nlb",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "tfbff8js9v",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 17:51:51.593185",
+  "name": "tfbrnvl86s",
+  "permitted_roles": [
+   {
+    "parent": "tfbrnvl86s",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "tfbff8js9v",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 19:55:38.141488",
+  "name": "605a833fh3",
+  "permitted_roles": [
+   {
+    "parent": "605a833fh3",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "604r4604r4",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 19:55:40.397047",
+  "name": "60so456j6b",
+  "permitted_roles": [
+   {
+    "parent": "60so456j6b",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "604r4604r4",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 19:55:44.383362",
+  "name": "623aaumqbj",
+  "permitted_roles": [
+   {
+    "parent": "623aaumqbj",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "604r4604r4",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:04:53.514560",
+  "name": "bdnrr3l009",
+  "permitted_roles": [
+   {
+    "parent": "bdnrr3l009",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bdl4upcgbg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:04:56.852590",
+  "name": "beo8r9ka56",
+  "permitted_roles": [
+   {
+    "parent": "beo8r9ka56",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bdl4upcgbg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:05:04.701252",
+  "name": "bh70bprrqb",
+  "permitted_roles": [
+   {
+    "parent": "bh70bprrqb",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "bdl4upcgbg",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:07:35.607865",
+  "name": "d0c1ebqk26",
+  "permitted_roles": [
+   {
+    "parent": "d0c1ebqk26",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "d0a8hvj3cr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:07:38.237506",
+  "name": "d166la3o1d",
+  "permitted_roles": [
+   {
+    "parent": "d166la3o1d",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "d0a8hvj3cr",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:07:45.416663",
+  "name": "d3eil8v3gv",
+  "permitted_roles": [
+   {
+    "parent": "d3eil8v3gv",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "d0a8hvj3cr",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:09:39.615349",
+  "name": "e74ao85bqb",
+  "permitted_roles": [
+   {
+    "parent": "e74ao85bqb",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "e73dmiogpn",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:09:48.262228",
+  "name": "e9q17cn88n",
+  "permitted_roles": [
+   {
+    "parent": "e9q17cn88n",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "e73dmiogpn",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:09:52.185061",
+  "name": "eb19c15q01",
+  "permitted_roles": [
+   {
+    "parent": "eb19c15q01",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "e73dmiogpn",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:12:00.923386",
+  "name": "fj9agftevf",
+  "permitted_roles": [
+   {
+    "parent": "fj9agftevf",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fj8r9a9krg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:12:03.411572",
+  "name": "fk2p0pnolq",
+  "permitted_roles": [
+   {
+    "parent": "fk2p0pnolq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fj8r9a9krg",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-12 20:12:06.072205",
+  "name": "fks27c0cql",
+  "permitted_roles": [
+   {
+    "parent": "fks27c0cql",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Asset Revaluation",
+  "reference_name": "fj8r9a9krg",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Applied"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "All",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-14 22:44:04.736269",
+  "name": "06f077sh2b",
+  "permitted_roles": [
+   {
+    "parent": "06f077sh2b",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "All"
+   }
+  ],
+  "reference_doctype": "Quotation",
+  "reference_name": "SAL-QTN-2026-00001",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Administrator",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-14 22:44:16.651623",
+  "name": "0a6rn2iphp",
+  "permitted_roles": [
+   {
+    "parent": "0a6rn2iphp",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Administrator"
+   }
+  ],
+  "reference_doctype": "Quotation",
+  "reference_name": "SAL-QTN-2026-00001",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Manager Approval"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-14 23:06:22.125166",
+  "name": "d8dauf70sq",
+  "permitted_roles": [
+   {
+    "parent": "d8dauf70sq",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00001",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-14 23:06:26.796624",
+  "name": "d9s3kta5jr",
+  "permitted_roles": [
+   {
+    "parent": "d9s3kta5jr",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00001",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Manager Approval"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-14 23:06:30.538064",
+  "name": "db1ph0lasd",
+  "permitted_roles": [
+   {
+    "parent": "db1ph0lasd",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00001",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Locked"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-15 06:41:45.913404",
+  "name": "o33ihhkdr7",
+  "permitted_roles": [
+   {
+    "parent": "o33ihhkdr7",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00001",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Release Requested"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-15 06:45:20.512143",
+  "name": "q65k7vaegr",
+  "permitted_roles": [
+   {
+    "parent": "q65k7vaegr",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00002",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-15 06:45:25.954553",
+  "name": "q7r6q29gp2",
+  "permitted_roles": [
+   {
+    "parent": "q7r6q29gp2",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00002",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Manager Approval"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-15 06:54:58.294221",
+  "name": "vqm2qcdpua",
+  "permitted_roles": [
+   {
+    "parent": "vqm2qcdpua",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00002",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Locked"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-15 06:55:02.205472",
+  "name": "vrum6pv7nc",
+  "permitted_roles": [
+   {
+    "parent": "vrum6pv7nc",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00002",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Release Requested"
+ }
+]
