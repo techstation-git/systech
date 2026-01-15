@@ -233,5 +233,10 @@ fixtures = [
 	"Property Setter",
     "Custom Field",
     "Client Script",
-	"Print Format"
+	"Print Format",
+	"Workflow",
+	"Workflow State",
+	"Workflow Action",
+	"Workflow Transition",
+	"Custom HTML Block"
 ]
