@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.model.workflow import apply_workflow
 
 def validate_item_barcode(doc, method):
 	"""
@@ -108,3 +109,74 @@ def apply_warehouse_security():
 			ps.save()
 	
 	frappe.db.commit()
+
+@frappe.whitelist()
+def unreserve_stock(sales_order_name):
+	"""
+	Closes the Sales Order to unreserve stock.
+	Only allowed for Sales Managers when the SO is Locked.
+	"""
+	if "Sales Manager" not in frappe.get_roles():
+		frappe.throw(_("Only Sales Managers can perform this action."))
+
+	doc = frappe.get_doc("Sales Order", sales_order_name)
+
+	if doc.workflow_state != "Locked":
+		frappe.throw(_("Sales Order must be in 'Locked' state to unreserve stock."))
+	
+	if doc.status == "Closed":
+		frappe.msgprint(_("Sales Order is already closed."))
+		return
+
+	# Closing the Sales Order unreserves the stock
+	doc.db_set("workflow_state", "Unreserved and Closed")
+	doc.update_status("Closed")
+	
+	frappe.msgprint(_("Sales Order {0} has been closed and stock unreserved.").format(sales_order_name))
+
+@frappe.whitelist()
+def process_workflow_action(docname, action):
+	"""
+	Applies a workflow action to a Sales Order.
+	"""
+	if "Sales Manager" not in frappe.get_roles():
+		frappe.throw(_("Only Sales Managers can perform this action."))
+
+	doc = frappe.get_doc("Sales Order", docname)
+	apply_workflow(doc, action)
+	doc.save()
+	
+	frappe.msgprint(_("Sales Order {0}: {1} applied successfully.").format(docname, action))
+	return doc.workflow_state
+
+@frappe.whitelist()
+def get_dashboard_stats():
+	"""
+	Returns counts for dashboard cards.
+	"""
+	if "Sales Manager" not in frappe.get_roles():
+		return {}
+
+	data = {}
+	
+	# Release Requested
+	data['release'] = frappe.db.count('Sales Order', filters={'workflow_state': 'Release Requested', 'docstatus': 1})
+	
+	# Pending Approval
+	data['approval'] = frappe.db.count('Sales Order', filters={'workflow_state': 'Pending Manager Approval'})
+	
+	# Locked (and qty)
+	locked_stats = frappe.db.sql("""
+		SELECT count(name) as count, sum(total_qty) as total_qty 
+		FROM `tabSales Order` 
+		WHERE workflow_state = 'Locked' AND docstatus = 1 AND status != 'Closed'
+	""", as_dict=True)[0]
+	
+	data['locked_count'] = locked_stats.count or 0
+	data['locked_qty'] = locked_stats.total_qty or 0
+	
+	return data
+
+
+
+

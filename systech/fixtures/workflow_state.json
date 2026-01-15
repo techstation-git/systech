@@ -39,28 +39,37 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
+  "modified": "2025-12-29 12:51:34.814045",
+  "name": "Applied",
+  "style": "Primary",
+  "workflow_state_name": "Applied"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2025-12-29 14:48:20.342856",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-01-15 08:33:55.221514",
+  "name": "Unreserved",
+  "style": "Inverse",
+  "workflow_state_name": "Unreserved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
   "modified": "2026-01-14 22:44:54.585706",
   "name": "Pending Manager Approval",
   "style": "Info",
   "workflow_state_name": "Pending Manager Approval"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
-  "modified": "2026-01-14 23:07:02.685387",
-  "name": "Locked",
-  "style": "Danger",
-  "workflow_state_name": "Locked"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
-  "modified": "2026-01-14 23:07:13.920161",
-  "name": "Release Requested",
-  "style": "Warning",
-  "workflow_state_name": "Release Requested"
  },
  {
   "docstatus": 0,
@@ -84,10 +93,10 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2025-12-29 12:51:34.814045",
-  "name": "Applied",
-  "style": "Primary",
-  "workflow_state_name": "Applied"
+  "modified": "2026-01-14 23:07:02.685387",
+  "name": "Locked",
+  "style": "Danger",
+  "workflow_state_name": "Locked"
  },
  {
   "docstatus": 0,
@@ -101,10 +110,10 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "ok-sign",
-  "modified": "2025-12-29 14:48:20.342856",
-  "name": "Approved",
-  "style": "Success",
-  "workflow_state_name": "Approved"
+  "icon": "",
+  "modified": "2026-01-14 23:07:13.920161",
+  "name": "Release Requested",
+  "style": "Warning",
+  "workflow_state_name": "Release Requested"
  }
 ]
