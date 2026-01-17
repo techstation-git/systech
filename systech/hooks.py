@@ -129,7 +129,16 @@ doc_events = {
 	},
 	"Stock Entry": {
 		"validate": "systech.services.rest.validate_transaction_barcodes"
-	}
+	},
+    "Sales Order": {
+        "before_insert": "systech.services.api.auto_assign_sales_person"
+    },
+    "Sales Invoice": {
+        "before_insert": "systech.services.api.auto_assign_sales_person"
+    },
+    "Quotation": {
+        "before_insert": "systech.services.api.auto_assign_sales_person"
+    }
 }
 
 # Scheduled Tasks
