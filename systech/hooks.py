@@ -100,9 +100,15 @@ app_license = "mit"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
+
+
+permission_query_conditions = {
+	"Sales Person": "systech.permissions.get_permission_query_conditions",
+	"Sales Order": "systech.permissions.get_permission_query_conditions_sales_order",
+	"Sales Invoice": "systech.permissions.get_permission_query_conditions_sales_invoice",
+	"Quotation": "systech.permissions.get_permission_query_conditions_quotation",
+	"Payment Entry": "systech.permissions.get_permission_query_conditions_payment_entry",
+}
 #
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
@@ -244,8 +250,8 @@ fixtures = [
     "Client Script",
 	"Print Format",
 	"Workflow",
-	"Workflow State",
-	"Workflow Action",
-	"Workflow Transition",
+	# "Workflow State",
+	# "Workflow Action",
+	# "Workflow Transition",
 	"Custom HTML Block"
 ]

@@ -796,5 +796,80 @@
         "translatable": 0,
         "unique": 0,
         "width": null
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "custom_section_break_dashboard",
+        "fieldtype": "Section Break",
+        "label": "Performance Dashboard",
+        "insert_after": "incentive_rate",
+        "module": "Systech",
+        "name": "Sales Person-custom_section_break_dashboard",
+        "docstatus": 0,
+        "doctype": "Custom Field",
+        "hidden": 0,
+        "read_only": 1
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "current_month_sales",
+        "fieldtype": "Currency",
+        "label": "Current Month Sales",
+        "insert_after": "custom_section_break_dashboard",
+        "module": "Systech",
+        "name": "Sales Person-current_month_sales",
+        "docstatus": 0,
+        "doctype": "Custom Field",
+        "read_only": 1,
+        "hidden": 0
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "current_month_qty",
+        "fieldtype": "Float",
+        "label": "Current Month Qty",
+        "insert_after": "current_month_sales",
+        "module": "Systech",
+        "name": "Sales Person-current_month_qty",
+        "docstatus": 0,
+        "doctype": "Custom Field",
+        "read_only": 1,
+        "hidden": 0
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "custom_column_break_dashboard",
+        "fieldtype": "Column Break",
+        "insert_after": "current_month_qty",
+        "module": "Systech",
+        "name": "Sales Person-custom_column_break_dashboard",
+        "docstatus": 0,
+        "doctype": "Custom Field"
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "target_status",
+        "fieldtype": "Data",
+        "label": "Target Status",
+        "insert_after": "custom_column_break_dashboard",
+        "module": "Systech",
+        "name": "Sales Person-target_status",
+        "docstatus": 0,
+        "doctype": "Custom Field",
+        "read_only": 1,
+        "hidden": 0
+    },
+    {
+        "dt": "Sales Person",
+        "fieldname": "estimated_commission",
+        "fieldtype": "Currency",
+        "label": "Estimated Commission",
+        "insert_after": "target_status",
+        "module": "Systech",
+        "name": "Sales Person-estimated_commission",
+        "docstatus": 0,
+        "doctype": "Custom Field",
+        "read_only": 1,
+        "hidden": 0
     }
 ]
