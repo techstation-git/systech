@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.utils import flt
 
 
 @frappe.whitelist()
@@ -116,10 +117,36 @@ def get_salesperson_dashboard_data():
     # Get salesperson linked to current user
     salesperson = get_current_salesperson()
     
+    # Fetch Locked Items Details (Strictly no prices)
+    # We use the same permissions logic from get_salesperson_stats
+    condition = ""
+    query_values = {'start_date': current_month_start, 'end_date': current_month_end}
+    if salesperson:
+        condition = "st.sales_person = %(salesperson)s"
+        query_values['salesperson'] = salesperson
+    else:
+        condition = "so.owner = %(user)s"
+        query_values['user'] = frappe.session.user
+
+    locked_items_details = frappe.db.sql(f"""
+        SELECT 
+            so.name, 
+            so.customer_name as customer, 
+            so.total_qty as qty, 
+            so.transaction_date as date
+        FROM `tabSales Order` so
+        LEFT JOIN `tabSales Team` st ON st.parent = so.name AND st.parenttype = 'Sales Order'
+        WHERE ({condition})
+        AND so.workflow_state = 'Locked'
+        AND so.docstatus < 2
+        ORDER BY so.creation DESC
+    """, query_values, as_dict=True)
+
     data = {
         "stats": get_salesperson_stats(salesperson, current_month_start, current_month_end),
         "salesperson": salesperson,
         "category_stock": get_stock_summary_by_item_group(),
+        "locked_items_details": locked_items_details,
         "period": {
             "start": current_month_start,
             "end": current_month_end
@@ -151,6 +178,7 @@ def get_current_salesperson():
     return salesperson
 
 
+
 def auto_assign_sales_person(doc, method):
     """
     Auto-assign the current logged-in user as a Sales Person to the document.
@@ -167,7 +195,6 @@ def auto_assign_sales_person(doc, method):
     # Check if salesperson is already in the team
     for entry in doc.sales_team:
         if entry.sales_person == salesperson:
-            # Update commission rate if logic requires checking target again (optional)
             return
 
     # Calculate Commission Rate based on Target
@@ -191,16 +218,33 @@ def auto_assign_sales_person(doc, method):
             # Fetch stats
             stats = get_salesperson_stats(salesperson, start_date, end_date)
             
-            # Use Total Sales (Actual + This New Order)
             current_sales = stats.get('total_sales', 0)
-            target = stats.get('sales_target', 0)
+            current_qty = stats.get('total_items', 0)
             
-            # If (Current Sales + New Doc Grand Total) > Target, apply Incentive Rate
-            # Note: For creation, we assume if they are ALREADY over target, or if this pushes them over.
-            # A simpler policy: If they have met the target, they get the higher rate.
+            target_amount = stats.get('sales_target', 0)
+            target_qty = stats.get('target_qty', 0)
             
-            if target > 0 and current_sales >= target:
-                 commission_rate = sp_details.incentive_rate
+            # Use strictly AND logic if both are present
+            # If only one is present, use that one.
+            
+            is_target_met = False
+            
+            if target_amount > 0 and target_qty > 0:
+                # Both targets must be met
+                if current_sales >= target_amount and current_qty >= target_qty:
+                    is_target_met = True
+            elif target_amount > 0:
+                # Only Amount target
+                if current_sales >= target_amount:
+                    is_target_met = True
+            elif target_qty > 0:
+                # Only Qty target
+                if current_qty >= target_qty:
+                    is_target_met = True
+            
+            if is_target_met:
+                 # Additive: Standard Commission + Incentive Rate
+                 commission_rate = flt(sp_details.commission_rate) + flt(sp_details.incentive_rate)
 
     # Add salesperson to team
     contribution = 100 if not doc.sales_team else 0
@@ -232,9 +276,11 @@ def get_stock_summary_by_item_group():
     return data
 
 
+
+@frappe.whitelist()
 def get_salesperson_stats(salesperson, start_date, end_date):
     """Get statistics for a specific salesperson for the given period"""
-    from frappe.utils import flt
+    from frappe.utils import flt, getdate
     
     stats = {
         "orders": 0,
@@ -242,95 +288,117 @@ def get_salesperson_stats(salesperson, start_date, end_date):
         "total_sales": 0,
         "total_items": 0,
         "sales_target": 0,
+        "target_qty": 0,
         "locked_items": 0,
         "currency": frappe.defaults.get_global_default('currency') or 'USD'
     }
+
+    # Determine Filter Condition
+    # If we are looking up a specific salesperson, restrict STRICTLY to that salesperson
+    # If no salesperson is linked, show data owned by the current session user (Personal Dashboard fallback)
+    condition = ""
+    query_values = {
+        'start_date': start_date, 
+        'end_date': end_date
+    }
     
-    # Even if no salesperson found, we still query for docs owned by the user
+    if salesperson:
+        condition = "st.sales_person = %(salesperson)s"
+        query_values['salesperson'] = salesperson
+    else:
+        condition = "so.owner = %(user)s"
+        query_values['user'] = frappe.session.user
+
     
     # Get orders count for current month (Draft and Submitted)
-    orders = frappe.db.sql("""
+    orders = frappe.db.sql(f"""
         SELECT COUNT(DISTINCT so.name) as count
         FROM `tabSales Order` so
         LEFT JOIN `tabSales Team` st ON st.parent = so.name AND st.parenttype = 'Sales Order'
-        WHERE (so.owner = %(user)s OR st.sales_person = %(salesperson)s)
+        WHERE ({condition})
         AND so.transaction_date BETWEEN %(start_date)s AND %(end_date)s
         AND so.docstatus < 2
-    """, {
-        'user': frappe.session.user,
-        'salesperson': salesperson,
-        'start_date': start_date,
-        'end_date': end_date
-    }, as_dict=True)
+    """, query_values, as_dict=True)
     
     stats['orders'] = orders[0].count if orders else 0
     
     # Get invoices count for current month
-    invoices = frappe.db.sql("""
+    # Note: Sales Invoice also has Sales Team.
+    # Adjust condition table alias if needed, but 'so' was used for owner check.
+    # Ideally standard alias 'doc' or similar. 
+    # But here we need to rebuild the condition for Invoice specifically if we used 'so' alias in condition.
+    
+    # Re-build condition for Invoice using 'si' alias
+    if salesperson:
+        inv_condition = "st.sales_person = %(salesperson)s"
+    else:
+        inv_condition = "si.owner = %(user)s"
+
+    invoices = frappe.db.sql(f"""
         SELECT COUNT(DISTINCT si.name) as count
         FROM `tabSales Invoice` si
         LEFT JOIN `tabSales Team` st ON st.parent = si.name AND st.parenttype = 'Sales Invoice'
-        WHERE (si.owner = %(user)s OR st.sales_person = %(salesperson)s)
+        WHERE ({inv_condition})
         AND si.posting_date BETWEEN %(start_date)s AND %(end_date)s
         AND si.docstatus = 1
-    """, {
-        'user': frappe.session.user,
-        'salesperson': salesperson,
-        'start_date': start_date,
-        'end_date': end_date
-    }, as_dict=True)
+    """, query_values, as_dict=True)
     
     stats['invoices'] = invoices[0].count if invoices else 0
     
-    # Get total sales and items for current month
-    sales_data = frappe.db.sql("""
+    # Get total sales and items for current month (Sales Order)
+    sales_data = frappe.db.sql(f"""
         SELECT 
             SUM(so.grand_total) as total_sales,
             SUM(so.total_qty) as total_items,
             so.currency
         FROM `tabSales Order` so
         LEFT JOIN `tabSales Team` st ON st.parent = so.name AND st.parenttype = 'Sales Order'
-        WHERE (so.owner = %(user)s OR st.sales_person = %(salesperson)s)
+        WHERE ({condition})
         AND so.transaction_date BETWEEN %(start_date)s AND %(end_date)s
         AND so.docstatus = 1
         GROUP BY so.currency
         ORDER BY total_sales DESC
         LIMIT 1
-    """, {
-        'user': frappe.session.user,
-        'salesperson': salesperson,
-        'start_date': start_date,
-        'end_date': end_date
-    }, as_dict=True)
+    """, query_values, as_dict=True)
     
     if sales_data:
         stats['total_sales'] = flt(sales_data[0].total_sales)
         stats['total_items'] = flt(sales_data[0].total_items)
         stats['currency'] = sales_data[0].currency or stats['currency']
     
-    # Get sales target for current month
-    from frappe.utils import get_first_day, get_last_day, getdate
-    
+
+
+    # Get sales target: Look for Specific Month, OR Fallback to Empty Item Group (Generic Yearly Target)
+    # Also fetch Distribution Percentage if available
     target_data = frappe.db.sql("""
-        SELECT target_amount
-        FROM `tabTarget Detail`
-        WHERE parent = %(salesperson)s
-        AND parenttype = 'Sales Person'
-        AND fiscal_year = YEAR(%(start_date)s)
+        SELECT 
+            td.target_amount, 
+            td.target_qty,
+            td.distribution_id,
+            mdp.percentage_allocation
+        FROM `tabTarget Detail` td
+        LEFT JOIN `tabMonthly Distribution Percentage` mdp 
+            ON mdp.parent = td.distribution_id 
+            AND mdp.month = MONTHNAME(%(start_date)s)
+        WHERE td.parent = %(salesperson)s
+        AND td.parenttype = 'Sales Person'
+        AND td.fiscal_year = YEAR(%(start_date)s)
         AND (
-            (MONTHNAME(%(start_date)s) = 'January' AND item_group = 'January')
-            OR (MONTHNAME(%(start_date)s) = 'February' AND item_group = 'February')
-            OR (MONTHNAME(%(start_date)s) = 'March' AND item_group = 'March')
-            OR (MONTHNAME(%(start_date)s) = 'April' AND item_group = 'April')
-            OR (MONTHNAME(%(start_date)s) = 'May' AND item_group = 'May')
-            OR (MONTHNAME(%(start_date)s) = 'June' AND item_group = 'June')
-            OR (MONTHNAME(%(start_date)s) = 'July' AND item_group = 'July')
-            OR (MONTHNAME(%(start_date)s) = 'August' AND item_group = 'August')
-            OR (MONTHNAME(%(start_date)s) = 'September' AND item_group = 'September')
-            OR (MONTHNAME(%(start_date)s) = 'October' AND item_group = 'October')
-            OR (MONTHNAME(%(start_date)s) = 'November' AND item_group = 'November')
-            OR (MONTHNAME(%(start_date)s) = 'December' AND item_group = 'December')
+            (MONTHNAME(%(start_date)s) = 'January' AND td.item_group = 'January')
+            OR (MONTHNAME(%(start_date)s) = 'February' AND td.item_group = 'February')
+            OR (MONTHNAME(%(start_date)s) = 'March' AND td.item_group = 'March')
+            OR (MONTHNAME(%(start_date)s) = 'April' AND td.item_group = 'April')
+            OR (MONTHNAME(%(start_date)s) = 'May' AND td.item_group = 'May')
+            OR (MONTHNAME(%(start_date)s) = 'June' AND td.item_group = 'June')
+            OR (MONTHNAME(%(start_date)s) = 'July' AND td.item_group = 'July')
+            OR (MONTHNAME(%(start_date)s) = 'August' AND td.item_group = 'August')
+            OR (MONTHNAME(%(start_date)s) = 'September' AND td.item_group = 'September')
+            OR (MONTHNAME(%(start_date)s) = 'October' AND td.item_group = 'October')
+            OR (MONTHNAME(%(start_date)s) = 'November' AND td.item_group = 'November')
+            OR (MONTHNAME(%(start_date)s) = 'December' AND td.item_group = 'December')
+            OR (td.item_group IS NULL OR td.item_group = '' OR td.item_group = 'All Item Groups') 
         )
+        ORDER BY td.target_amount DESC
         LIMIT 1
     """, {
         'salesperson': salesperson,
@@ -338,22 +406,27 @@ def get_salesperson_stats(salesperson, start_date, end_date):
     }, as_dict=True)
     
     if target_data:
-        stats['sales_target'] = flt(target_data[0].target_amount)
+        amount = flt(target_data[0].target_amount)
+        qty = flt(target_data[0].target_qty)
+        percentage = flt(target_data[0].percentage_allocation)
+        
+        # If distribution percentage exists, apply it
+        if percentage > 0:
+            amount = (amount * percentage) / 100.0
+            qty = (qty * percentage) / 100.0
+            
+        stats['sales_target'] = amount
+        stats['target_qty'] = qty
     
     # Get locked items count for current month (using workflow_state = 'Locked')
-    locked_items = frappe.db.sql("""
+    locked_items = frappe.db.sql(f"""
         SELECT COUNT(*) as count
         FROM `tabSales Order` so
         LEFT JOIN `tabSales Team` st ON st.parent = so.name AND st.parenttype = 'Sales Order'
-        WHERE (so.owner = %(user)s OR st.sales_person = %(salesperson)s)
+        WHERE ({condition})
         AND so.transaction_date BETWEEN %(start_date)s AND %(end_date)s
         AND so.workflow_state = 'Locked'
-    """, {
-        'user': frappe.session.user,
-        'salesperson': salesperson,
-        'start_date': start_date,
-        'end_date': end_date
-    }, as_dict=True)
+    """, query_values, as_dict=True)
     
     stats['locked_items'] = locked_items[0].count if locked_items else 0
     
