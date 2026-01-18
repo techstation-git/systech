@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.utils import flt
 
 
 @frappe.whitelist()
@@ -116,10 +117,36 @@ def get_salesperson_dashboard_data():
     # Get salesperson linked to current user
     salesperson = get_current_salesperson()
     
+    # Fetch Locked Items Details (Strictly no prices)
+    # We use the same permissions logic from get_salesperson_stats
+    condition = ""
+    query_values = {'start_date': current_month_start, 'end_date': current_month_end}
+    if salesperson:
+        condition = "st.sales_person = %(salesperson)s"
+        query_values['salesperson'] = salesperson
+    else:
+        condition = "so.owner = %(user)s"
+        query_values['user'] = frappe.session.user
+
+    locked_items_details = frappe.db.sql(f"""
+        SELECT 
+            so.name, 
+            so.customer_name as customer, 
+            so.total_qty as qty, 
+            so.transaction_date as date
+        FROM `tabSales Order` so
+        LEFT JOIN `tabSales Team` st ON st.parent = so.name AND st.parenttype = 'Sales Order'
+        WHERE ({condition})
+        AND so.workflow_state = 'Locked'
+        AND so.docstatus < 2
+        ORDER BY so.creation DESC
+    """, query_values, as_dict=True)
+
     data = {
         "stats": get_salesperson_stats(salesperson, current_month_start, current_month_end),
         "salesperson": salesperson,
         "category_stock": get_stock_summary_by_item_group(),
+        "locked_items_details": locked_items_details,
         "period": {
             "start": current_month_start,
             "end": current_month_end
@@ -217,7 +244,7 @@ def auto_assign_sales_person(doc, method):
             
             if is_target_met:
                  # Additive: Standard Commission + Incentive Rate
-                 commission_rate = (sp_details.commission_rate or 0) + (sp_details.incentive_rate or 0)
+                 commission_rate = flt(sp_details.commission_rate) + flt(sp_details.incentive_rate)
 
     # Add salesperson to team
     contribution = 100 if not doc.sales_team else 0
