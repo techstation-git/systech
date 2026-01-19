@@ -252,6 +252,7 @@ fixtures = [
 	"Workflow",
 	"Workspace",
 	"Role",
+	"Custom DocPerm",
 
 	# "Workflow State",
 	# "Workflow Action",
