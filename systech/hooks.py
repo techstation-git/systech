@@ -250,6 +250,9 @@ fixtures = [
     "Client Script",
 	"Print Format",
 	"Workflow",
+	"Workspace",
+	"Role",
+
 	# "Workflow State",
 	# "Workflow Action",
 	# "Workflow Transition",
