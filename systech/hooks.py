@@ -25,7 +25,7 @@ app_license = "mit"
 # ------------------
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Sales Order" : "public/js/sales_order.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -137,7 +137,9 @@ doc_events = {
 		"validate": "systech.services.rest.validate_transaction_barcodes"
 	},
     "Sales Order": {
-        "before_insert": "systech.services.api.auto_assign_sales_person"
+        "before_insert": "systech.services.api.auto_assign_sales_person",
+        "before_workflow_action": "systech.services.workflow.before_workflow_action",
+        "on_update": "systech.services.workflow.check_dependencies_on_release"
     },
     "Sales Invoice": {
         "before_insert": "systech.services.api.auto_assign_sales_person"

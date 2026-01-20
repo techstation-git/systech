@@ -54,7 +54,7 @@ def get_permission_query_conditions_sales_order(user):
         # No linked salesperson - show nothing
         return "1=0"
     
-    # Only show Sales Orders where this salesperson is in the Sales Team
+    # Only show Sales Orders where this salesperson is in the Sales Team OR Order is Locked
     return f"""(`tabSales Order`.name IN (
         SELECT parent 
         FROM `tabSales Team` 
