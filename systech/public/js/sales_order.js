@@ -69,6 +69,13 @@ frappe.ui.form.on('Sales Order', {
         }
 
 
+        // Add custom Email button
+        if (frm.doc.docstatus === 1 && frm.doc.customer) {
+            frm.add_custom_button(__('Email'), function () {
+                send_document_email(frm, 'customer');
+            }, __('Actions'));
+        }
+
         // Release Request Indicator & Manager Action
         if (frm.doc.custom_release_status === 'Requested') {
             frm.dashboard.set_headline_alert(
@@ -149,30 +156,20 @@ frappe.ui.form.on('Sales Order', {
                                         `
                                     },
                                     // ... existing fields ...
-                                ],
-                                primary_action_label: __('Close'),
-                                primary_action: function () {
-                                    d.hide();
-                                },
-                                secondary_action_label: __('Refresh'),
-                                secondary_action: function () {
-                                    d.hide();
-                                    // Trigger the action again to re-check
-                                    frm.page.actions_btn_group.find(`li a:contains("${frm.selected_workflow_action}")`).click();
-                                }
+
                                     {
-                                    fieldtype: 'HTML',
-                                    fieldname: 'locked_orders_title',
-                                    options: `<h5 class="mt-4">${__('Locked Sales Orders utilizing this stock:')}</h5>`
-                                },
-                                {
-                                    fieldtype: 'HTML',
-                                    fieldname: 'locked_orders_table',
-                                    options: (() => {
-                                        if (!r.message.blockers || r.message.blockers.length === 0) {
-                                            return `<p class="text-muted">${__('No other Locked orders found.')}</p>`;
-                                        }
-                                        return `
+                                        fieldtype: 'HTML',
+                                        fieldname: 'locked_orders_title',
+                                        options: `<h5 class="mt-4">${__('Locked Sales Orders utilizing this stock:')}</h5>`
+                                    },
+                                    {
+                                        fieldtype: 'HTML',
+                                        fieldname: 'locked_orders_table',
+                                        options: (() => {
+                                            if (!r.message.blockers || r.message.blockers.length === 0) {
+                                                return `<p class="text-muted">${__('No other Locked orders found.')}</p>`;
+                                            }
+                                            return `
                                                 <table class="table table-bordered table-condensed">
                                                     <thead>
                                                         <tr>
@@ -202,44 +199,99 @@ frappe.ui.form.on('Sales Order', {
                                                     </tbody>
                                                 </table>
                                             `;
-                                    })()
-                                }
+                                        })()
+                                    }
                                 ]
-        });
+                                ,
+                                primary_action_label: __('Close'),
+                                primary_action: function () {
+                                    d.hide();
+                                },
+                                secondary_action_label: __('Refresh'),
+                                secondary_action: function () {
+                                    d.hide();
+                                    // Trigger the action again to re-check
+                                    frm.page.actions_btn_group.find(`li a:contains("${frm.selected_workflow_action}")`).click();
+                                }
+                            });
 
-d.show();
+                            d.show();
 
-// Bind Click Event for Request Release
-d.$wrapper.find('.btn-request-release').on('click', function () {
-    let btn = $(this);
-    let order_name = btn.data('order');
-    btn.prop('disabled', true).text(__('Requesting...'));
+                            // Bind Click Event for Request Release
+                            d.$wrapper.find('.btn-request-release').on('click', function () {
+                                let btn = $(this);
+                                let order_name = btn.data('order');
+                                btn.prop('disabled', true).text(__('Requesting...'));
 
-    frappe.call({
-        method: 'systech.services.workflow.request_release',
-        args: {
-            docname: order_name,
-            source_docname: frm.doc.name
-        },
-        callback: function (res) {
-            if (!res.exc) {
-                frappe.show_alert({ message: __('Release requested for {0}', [order_name]), indicator: 'green' });
-                btn.text(__('Requested')).removeClass('btn-primary').addClass('btn-success');
-            } else {
-                btn.prop('disabled', false).text(__('Retry'));
-            }
-        }
-    });
-});
+                                frappe.call({
+                                    method: 'systech.services.workflow.request_release',
+                                    args: {
+                                        docname: order_name,
+                                        source_docname: frm.doc.name
+                                    },
+                                    callback: function (res) {
+                                        if (!res.exc) {
+                                            frappe.show_alert({ message: __('Release requested for {0}', [order_name]), indicator: 'green' });
+                                            btn.text(__('Requested')).removeClass('btn-primary').addClass('btn-success');
+                                        } else {
+                                            btn.prop('disabled', false).text(__('Retry'));
+                                        }
+                                    }
+                                });
+                            });
 
-reject(); // Block the workflow action
+                            reject(); // Block the workflow action
                         } else {
-    resolve(); // Proceed
-}
+                            resolve(); // Proceed
+                        }
                     }
                 });
             });
-return promise;
+            return promise;
         }
     }
 });
+
+// Generic email sender for documents
+function send_document_email(frm, party_type) {
+    let party_field = party_type; // 'customer' or 'supplier'
+    let party_name = frm.doc[party_field];
+
+    if (!party_name) {
+        frappe.msgprint(__('No {0} selected', [party_type]));
+        return;
+    }
+
+    // Fetch email
+    frappe.call({
+        method: 'systech.api.email.get_party_email',
+        args: {
+            party_type: party_type === 'customer' ? 'Customer' : 'Supplier',
+            party_name: party_name
+        },
+        callback: function (r) {
+            if (r.message) {
+                // Email found, open dialog
+                new frappe.views.CommunicationComposer({
+                    doc: frm.doc,
+                    frm: frm,
+                    subject: __('{0}: {1}', [frm.doctype, frm.docname]),
+                    recipients: r.message,
+                    attach_document_print: true,
+                    real_name: party_name
+                });
+            } else {
+                // No email found, show warning
+                frappe.msgprint({
+                    title: __('Email Not Found'),
+                    indicator: 'orange',
+                    message: __(
+                        'The {0} <b>{1}</b> does not have an email address.<br><br>' +
+                        'Please <a href="/app/{2}/{3}">add email to {0} record</a> first.',
+                        [party_type, party_name, party_type, party_name]
+                    )
+                });
+            }
+        }
+    });
+}

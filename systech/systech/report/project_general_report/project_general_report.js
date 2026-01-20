@@ -78,5 +78,40 @@ frappe.query_reports["Project General Report"] = {
         }).on("mouseleave", function () {
             $(this).css("transform", "translateY(0)");
         });
+    },
+    "onload": function (report) {
+        // Add Send to Email button
+        report.page.add_inner_button(__('Send to Email'), function () {
+            let d = new frappe.ui.Dialog({
+                title: __('Email Report'),
+                fields: [
+                    { fieldtype: 'Data', fieldname: 'email', label: __('To'), reqd: 1 },
+                    { fieldtype: 'Data', fieldname: 'subject', label: __('Subject'), default: 'Project General Report' },
+                    { fieldtype: 'Select', fieldname: 'format', label: __('Format'), options: 'PDF\nExcel', default: 'PDF' }
+                ],
+                primary_action_label: __('Send'),
+                primary_action: function (values) {
+                    frappe.call({
+                        method: 'systech.api.email.send_report_email',
+                        args: {
+                            report_name: 'Project General Report',
+                            filters: report.get_values(),
+                            recipients: values.email,
+                            subject: values.subject,
+                            message: 'Please find attached.',
+                            format: values.format
+                        },
+                        freeze: true,
+                        callback: function (r) {
+                            if (!r.exc) {
+                                frappe.show_alert({ message: __('Sent!'), indicator: 'green' });
+                                d.hide();
+                            }
+                        }
+                    });
+                }
+            });
+            d.show();
+        }, null, 'primary');
     }
 };
