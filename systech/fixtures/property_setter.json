@@ -1,6 +1,38 @@
 [
  {
   "default_value": null,
+  "doc_type": "Project",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "customer",
+  "is_system_generated": 0,
+  "modified": "2026-01-21 11:24:13.190518",
+  "module": null,
+  "name": "Project-customer-reqd",
+  "property": "reqd",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Project",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "estimated_costing",
+  "is_system_generated": 0,
+  "modified": "2026-01-21 11:24:13.236716",
+  "module": null,
+  "name": "Project-estimated_costing-reqd",
+  "property": "reqd",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ },
+ {
+  "default_value": null,
   "doc_type": "Item",
   "docstatus": 0,
   "doctype": "Property Setter",

@@ -74,7 +74,8 @@ def get_recent_orders():
             base_net_total,
             grand_total,
             currency,
-            status
+            status,
+            (SELECT sales_person FROM `tabSales Team` WHERE parent = `tabSales Order`.name LIMIT 1) as sales_person
         FROM `tabSales Order`
         ORDER BY creation DESC
         LIMIT 20

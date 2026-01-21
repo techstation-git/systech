@@ -161,6 +161,9 @@ doc_events = {
     },
     "Customer": {
         "before_insert": "systech.api.customer.auto_assign_sales_team"
+    },
+    "Project": {
+        "validate": "systech.services.project_budget.validate_project_budget"
     }
 }
 
