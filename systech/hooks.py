@@ -27,7 +27,8 @@ app_license = "mit"
 # include js, css files in header of desk.html
 app_include_js = [
     "public/js/email_helper.js",
-    "public/js/report_email.js"
+    "public/js/report_email.js",
+    "public/js/sales_person_list.js"
 ]
 
 # include js in doctype views

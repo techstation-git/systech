@@ -10,7 +10,7 @@ def before_workflow_action(doc, transition):
         # Check 1: Initial Submission (Draft -> Pending)
         # Prevent reservation if stock is insufficient.
         if transition.action == "Submit To Manager":
-            # validate_stock_availability(doc)
+            validate_stock_availability(doc)
             pass
 
         # Check 2: Final Release (Locked -> Released)
