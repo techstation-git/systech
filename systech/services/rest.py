@@ -178,5 +178,42 @@ def get_dashboard_stats():
 	return data
 
 
+@frappe.whitelist()
+def get_stock_release_list(workflow_state, status=None):
+	"""
+	Get list of Sales Orders for Stock Release Console.
+	Fetches sales_person via subquery.
+	"""
+	if "Sales Manager" not in frappe.get_roles():
+		return []
+
+	conditions = ["workflow_state = %(workflow_state)s", "docstatus != 2"] # Exclude cancelled
+	values = {"workflow_state": workflow_state}
+
+	# Custom handling for the filter logic passed from JS
+	if workflow_state == 'Locked':
+		conditions.append("status != 'Closed'")
+		conditions.append("docstatus = 1") # Locked must be submitted
+
+	where_clause = " AND ".join(conditions)
+
+	sql = f"""
+		SELECT 
+			name, 
+			customer, 
+			transaction_date, 
+			grand_total, 
+			currency, 
+			total_qty,
+			(SELECT sales_person FROM `tabSales Team` WHERE parent = `tabSales Order`.name LIMIT 1) as sales_person
+		FROM `tabSales Order`
+		WHERE {where_clause}
+		ORDER BY transaction_date ASC
+	"""
+
+	return frappe.db.sql(sql, values, as_dict=True)
+
+
+
 
 
