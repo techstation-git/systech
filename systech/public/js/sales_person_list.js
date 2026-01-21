@@ -1,4 +1,5 @@
-frappe.listview_settings['Sales Person'] = {
+frappe.listview_settings['Sales Person'] = frappe.listview_settings['Sales Person'] || {};
+Object.assign(frappe.listview_settings['Sales Person'], {
     onload: function (listview) {
         // Add bulk action button
         listview.page.add_action_item(__('Set Monthly Target'), function () {
@@ -12,7 +13,7 @@ frappe.listview_settings['Sales Person'] = {
             show_target_dialog(selected);
         });
     }
-};
+});
 
 function show_target_dialog(selected_people) {
     // Get current month and year for defaults
