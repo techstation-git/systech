@@ -39,10 +39,10 @@ frappe.query_reports["Project Detailed Report"] = {
             "options": "Supplier"
         },
         {
-            "fieldname": "project",
-            "label": __("Project"),
+            "fieldname": "item_brand",
+            "label": __("Item Brand"),
             "fieldtype": "Link",
-            "options": "Project"
+            "options": "Item Group"
         }
     ],
     "onload": function (report) {

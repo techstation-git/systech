@@ -59,13 +59,63 @@ frappe.ui.form.on('Sales Order', {
 
 
         if (frm.doc.workflow_state === 'Locked') {
-            // Hide the 'Create' button which normally allows making Invoices/Delivery Notes
-            // Use a timeout to ensure toolbar is rendered
-            setTimeout(function () {
-                frm.page.remove_inner_button('Create');
-                // Also try hiding via class/attribute in case it's a standard group button
-                frm.page.wrapper.find('button[data-label="Create"]').parent().hide();
-            }, 100);
+            // Hide standard buttons by removing them item by item
+            // Using polling to capture late-loading buttons
+            const hideButtons = () => {
+                // Double check state to prevent race conditions during navigation
+                if (frm.doc.workflow_state !== 'Locked') return;
+
+                const to_hide = [
+                    // Create Menu Items
+                    ['Pick List', 'Create'],
+                    ['Delivery Note', 'Create'],
+                    ['Work Order', 'Create'],
+                    ['Sales Invoice', 'Create'],
+                    ['Material Request', 'Create'],
+                    ['Purchase Order', 'Create'],
+                    ['Request for Raw Materials', 'Create'],
+                    ['Project', 'Create'],
+                    ['Payment Request', 'Create'],
+                    ['Payment', 'Create'],
+                    ['Subscription', 'Create'],
+                    ['Maintenance Visit', 'Create'],
+                    ['Maintenance Schedule', 'Create'],
+
+                    // Status Menu Items
+                    ['Hold', 'Status'],
+                    ['Close', 'Status'],
+
+                    // Solo Buttons
+                    ['Update Items', null]
+                ];
+
+                to_hide.forEach(b => {
+                    if (frm.remove_custom_button) {
+                        try {
+                            frm.remove_custom_button(b[0], b[1]);
+                        } catch (e) { }
+                    }
+                });
+
+                // Fallback: Try to hide the groups themselves using standard API
+                try {
+                    if (frm.page.remove_inner_button) {
+                        frm.page.remove_inner_button('Create');
+                        frm.page.remove_inner_button('Status');
+                    }
+                } catch (e) { }
+            };
+
+            // Run immediately
+            hideButtons();
+
+            // Poll every 200ms for 2 seconds
+            let counter = 0;
+            let interval = setInterval(function () {
+                hideButtons();
+                counter++;
+                if (counter > 10) clearInterval(interval);
+            }, 200);
         }
 
 

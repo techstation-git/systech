@@ -30,7 +30,8 @@ def get_data(filters):
     from_date = filters.get("from_date")
     to_date = filters.get("to_date")
     supplier = filters.get("supplier")
-    project = filters.get("project")
+    project = filters.get("project") # Still get it if it exists in filters but we removed it from UI
+    item_brand = filters.get("item_brand")
 
     sql = """
         SELECT 
@@ -45,9 +46,11 @@ def get_data(filters):
             items.rate, 
             items.amount,
             pi.paid_amount,
-            pi.outstanding_amount
+            pi.outstanding_amount,
+            i.item_group
         FROM `tabPurchase Invoice` pi
         JOIN `tabPurchase Invoice Item` items ON items.parent = pi.name
+        JOIN `tabItem` i ON i.name = items.item_code
         WHERE pi.posting_date BETWEEN %(from_date)s AND %(to_date)s
         AND pi.docstatus = 1
     """
@@ -55,9 +58,9 @@ def get_data(filters):
     if supplier:
         sql += " AND pi.supplier = %(supplier)s"
         params["supplier"] = supplier
-    if project:
-        sql += " AND pi.project = %(project)s"
-        params["project"] = project
+    if item_brand:
+        sql += " AND i.item_group = %(item_brand)s"
+        params["item_brand"] = item_brand
     
     sql += " ORDER BY pi.posting_date DESC, pi.name DESC"
     
