@@ -1,0 +1,87 @@
+{
+    "actions": [],
+    "creation": "2026-01-21 00:11:00",
+    "doctype": "DocType",
+    "editable_grid": 0,
+    "engine": "InnoDB",
+    "field_order": [
+        "fiscal_year",
+        "item_group",
+        "column_break_3",
+        "target_type",
+        "amount",
+        "section_break_5",
+        "apply_to"
+    ],
+    "fields": [
+        {
+            "fieldname": "fiscal_year",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Fiscal Year",
+            "options": "Fiscal Year",
+            "reqd": 1
+        },
+        {
+            "fieldname": "item_group",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Item Group",
+            "options": "Item Group",
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_3",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "Monthly",
+            "fieldname": "target_type",
+            "fieldtype": "Select",
+            "label": "Target Type",
+            "options": "Monthly\nYearly",
+            "reqd": 1
+        },
+        {
+            "fieldname": "amount",
+            "fieldtype": "Float",
+            "label": "Target Amount",
+            "precision": "2",
+            "reqd": 1
+        },
+        {
+            "fieldname": "section_break_5",
+            "fieldtype": "Section Break"
+        },
+        {
+            "default": "All Sales People",
+            "fieldname": "apply_to",
+            "fieldtype": "Select",
+            "label": "Apply To",
+            "options": "All Sales People\nSpecific Hierarchy"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "issingle": 1,
+    "links": [],
+    "modified": "2026-01-21 00:11:00",
+    "modified_by": "Administrator",
+    "module": "Systech",
+    "name": "Bulk Sales Person Target",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "Sales Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
