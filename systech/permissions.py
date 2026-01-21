@@ -50,17 +50,21 @@ def get_permission_query_conditions_sales_order(user):
     from systech.services.api import get_current_salesperson
     salesperson = get_current_salesperson()
     
-    if not salesperson:
-        # No linked salesperson - show nothing
-        return "1=0"
+    conditions = []
     
-    # Only show Sales Orders where this salesperson is in the Sales Team OR Order is Locked
-    return f"""(`tabSales Order`.name IN (
-        SELECT parent 
-        FROM `tabSales Team` 
-        WHERE parenttype = 'Sales Order' 
-        AND sales_person = {frappe.db.escape(salesperson)}
-    ))"""
+    # 1. Allow if User is Owner
+    conditions.append(f"`tabSales Order`.owner = {frappe.db.escape(user)}")
+
+    # 2. Allow if linked Sales Person is in Sales Team
+    if salesperson:
+        conditions.append(f"""`tabSales Order`.name IN (
+            SELECT parent 
+            FROM `tabSales Team` 
+            WHERE parenttype = 'Sales Order' 
+            AND sales_person = {frappe.db.escape(salesperson)}
+        )""")
+    
+    return f"({' OR '.join(conditions)})"
 
 
 def get_permission_query_conditions_sales_invoice(user):
