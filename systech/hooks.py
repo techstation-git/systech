@@ -274,8 +274,8 @@ fixtures = [
 	"Role",
 	"Custom DocPerm",
 
-	# "Workflow State",
-	# "Workflow Action",
-	# "Workflow Transition",
+	"Workflow State",
+	"Workflow Action",
+	"Workflow Transition",
 	"Custom HTML Block"
 ]
