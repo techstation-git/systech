@@ -1,15 +1,14 @@
 {
     "add_total_row": 1,
     "columns": [],
-    "creation": "2026-01-18 14:00:00.000000",
     "disabled": 0,
     "docstatus": 0,
     "doctype": "Report",
     "is_standard": "Yes",
     "module": "Systech",
-    "name": "Project General Report",
+    "name": "Detailed Report {Project and Customer}",
     "ref_doctype": "Sales Invoice",
-    "report_name": "Project General Report",
+    "report_name": "Detailed Report {Project and Customer}",
     "report_type": "Script Report",
     "roles": [
         {

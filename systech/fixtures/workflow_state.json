@@ -75,15 +75,6 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2025-12-29 12:50:43.220609",
-  "name": "Draft",
-  "style": "",
-  "workflow_state_name": "Draft"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
   "modified": "2026-01-14 23:07:13.920161",
   "name": "Release Requested",
   "style": "Warning",
@@ -106,6 +97,15 @@
   "name": "Locked",
   "style": "Danger",
   "workflow_state_name": "Locked"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2025-12-29 12:50:43.220609",
+  "name": "Draft",
+  "style": "",
+  "workflow_state_name": "Draft"
  },
  {
   "docstatus": 0,
