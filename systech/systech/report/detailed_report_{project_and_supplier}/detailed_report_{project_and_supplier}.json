@@ -7,9 +7,9 @@
     "doctype": "Report",
     "is_standard": "Yes",
     "module": "Systech",
-    "name": "Project Detailed Report",
+    "name": "Detailed Report {Project and Supplier}",
     "ref_doctype": "Purchase Invoice",
-    "report_name": "Project Detailed Report",
+    "report_name": "Detailed Report {Project and Supplier}",
     "report_type": "Script Report",
     "roles": [
         {

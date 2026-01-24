@@ -10,6 +10,8 @@ def execute(filters=None):
         {"label": _("Date"), "fieldname": "posting_date", "fieldtype": "Date", "width": 100},
         {"label": _("Voucher Type"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 120},
         {"label": _("Voucher Number"), "fieldname": "name", "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 140},
+        {"label": _("Supplier"), "fieldname": "supplier", "fieldtype": "Link", "options": "Supplier", "width": 140},
+        {"label": _("Project"), "fieldname": "project", "fieldtype": "Link", "options": "Project", "width": 140},
         {"label": _("Against Account"), "fieldname": "credit_to", "fieldtype": "Data", "width": 160},
         {"label": _("Address"), "fieldname": "address_display", "fieldtype": "Data", "width": 180},
         {"label": _("Item"), "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 130},
@@ -30,7 +32,7 @@ def get_data(filters):
     from_date = filters.get("from_date")
     to_date = filters.get("to_date")
     supplier = filters.get("supplier")
-    project = filters.get("project") # Still get it if it exists in filters but we removed it from UI
+    project = filters.get("project")
     item_brand = filters.get("item_brand")
 
     sql = """
@@ -38,6 +40,8 @@ def get_data(filters):
             pi.posting_date, 
             'Purchase Invoice' as voucher_type,
             pi.name, 
+            pi.supplier,
+            pi.project,
             pi.credit_to,
             pi.address_display,
             items.item_code, 
@@ -58,6 +62,9 @@ def get_data(filters):
     if supplier:
         sql += " AND pi.supplier = %(supplier)s"
         params["supplier"] = supplier
+    if project:
+        sql += " AND pi.project = %(project)s"
+        params["project"] = project
     if item_brand:
         sql += " AND i.item_group = %(item_brand)s"
         params["item_brand"] = item_brand

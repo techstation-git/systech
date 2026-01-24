@@ -11,7 +11,12 @@ def before_workflow_action(doc, transition):
         # Prevent reservation if stock is insufficient.
         if transition.action == "Submit To Manager":
             validate_stock_availability(doc)
-            pass
+            
+        if transition.action == "Approve":
+            total_remaining = sum([flt(d.qty) for d in doc.items])
+            if total_remaining <= 0:
+                doc.status = "Closed"
+                doc.db_set("status", "Closed")
 
         # Check 2: Final Release (Locked -> Released)
         # Safety check (optional based on new flow, but good to keep)
@@ -71,7 +76,7 @@ def validate_stock_availability(doc):
             locked_blockers = []
             for b in blockers:
                  state = frappe.db.get_value("Sales Order", b.parent, "workflow_state")
-                 if state == "Locked":
+                 if state == "Approved":
                      locked_blockers.append(b.parent)
             
             if locked_blockers:
@@ -84,7 +89,7 @@ def validate_stock_availability(doc):
         
         if conflicting_orders_map:
             msg += "<hr>"
-            msg += _("<b>The stock is currently reserved by the following Locked Orders. Please request a release:</b><br>")
+            msg += _("<b>The stock is currently reserved by the following Approved Orders. Please request a release:</b><br>")
             
             for item_code, orders in conflicting_orders_map.items():
                 msg += f"<p>Item: {item_code}</p>"
@@ -98,7 +103,7 @@ def validate_stock_availability(doc):
 @frappe.whitelist()
 def request_release(docname, source_docname=None):
     """
-    Notify Sales Manager to release stock from a Locked order.
+    Notify Sales Manager to release stock from an Approved order.
     If source_docname is provided, set its state to 'Release Requested'.
     """
     if not docname:
@@ -117,7 +122,7 @@ def request_release(docname, source_docname=None):
         notification.for_user = manager
         notification.type = "Alert"
         notification.subject = _("Stock Release Requested")
-        notification.email_content = _("User {0} has requested to release stock from Locked Sales Order {1}. Reference Source Order: {2}").format(
+        notification.email_content = _("User {0} has requested to release stock from Approved Sales Order {1}. Reference Source Order: {2}").format(
             frappe.session.user, docname, source_docname or "N/A"
         )
         notification.document_type = "Sales Order"
@@ -149,31 +154,23 @@ def request_release(docname, source_docname=None):
 @frappe.whitelist()
 def check_dependencies_on_release(doc, method=None):
     """
-    Triggered when a Sales Order is Unreserved/Cancelled/Released.
+    Triggered when a Sales Order is Unreserved/Cancelled/Released/Updated.
     Checks if any 'Release Requested' orders can now be processed.
     """
-    target_states = ["Closed", "Cancelled"] 
-    # If doc is in these states, or docstatus is 2.
-    
     if doc.status == "Closed" and doc.docstatus == 1:
-        # Force update reserved qty to ensure it drops to 0.
-        # Standard update_reserved_qty might not be enough if it re-reads docstatus=1.
-        # We explicitly update the Bin to remove this order's reservation.
+        # Force update reserved qty to ensure it drops to 0 immediately if Closed.
         doc.update_reserved_qty()
         
-        # Aggressive Fix: Iterate items and ensure Bin is updated
         from erpnext.stock.utils import get_bin
         for d in doc.items:
             if d.item_code and d.warehouse:
                 bin_obj = get_bin(d.item_code, d.warehouse)
-                bin_obj.update_reserved_qty()
+                bin_obj.update_reserved_stock()
                 
-    if doc.workflow_state not in target_states and doc.docstatus != 2:
-        return
-
-    # Enqueue the check to ensure current transaction (Lock/Close) is committed 
-    # and Bin is updated before we check stock for others.
-    frappe.enqueue("systech.services.workflow.process_candidates", queue="default", timeout=300)
+    # We trigger process_candidates on EVERY update of a submitted SO 
+    # to catch partial releases or state changes.
+    if doc.docstatus == 1 or doc.docstatus == 2:
+        frappe.enqueue("systech.services.workflow.process_candidates", queue="default", timeout=300)
 
 @frappe.whitelist()
 def process_candidates():
@@ -183,6 +180,8 @@ def process_candidates():
         fields=["name", "owner"]
     )
     
+    frappe.logger().debug(f"[Systech Workflow] Processing {len(candidates)} candidates for stock promotion")
+    
     if not candidates:
         return
         
@@ -190,13 +189,22 @@ def process_candidates():
         # Check stock for this candidate
         res = check_stock_availability(candidate.name)
         
+        frappe.logger().debug(f"[Systech Workflow] Candidate {candidate.name} check result: {res.get('status')}")
+        
         if res.get("status") == "success":
             # Stock is now available!
             frappe.flags.ignore_permissions = True
             try:
                 c_doc = frappe.get_doc("Sales Order", candidate.name)
+                
+                if c_doc.custom_release_status != "Requested":
+                    continue
+
+                frappe.logger().info(f"[Systech Workflow] Promoting {candidate.name} to Pending Manager Approval")
+                
                 c_doc.workflow_state = "Pending Manager Approval"
                 c_doc.custom_release_status = "" # Clear the request flag
+                c_doc.flags.ignore_validate_update_after_submit = True
                 c_doc.save(ignore_permissions=True)
                 
                 # Notify Owner
@@ -205,9 +213,13 @@ def process_candidates():
                 notification.type = "Alert"
                 notification.subject = _("Stock Available - Order Promoted")
                 notification.email_content = _("Stock is now available for your Sales Order {0}. It has been moved to 'Pending Manager Approval'.").format(candidate.name)
-                notification.document_type = "Sales Order"
                 notification.document_name = candidate.name
+                notification.document_type = "Sales Order"
                 notification.insert(ignore_permissions=True)
+                
+                frappe.db.commit()
+            except Exception as e:
+                frappe.logger().error(f"[Systech Workflow] Failed to promote {candidate.name}: {str(e)}")
             finally:
                 frappe.flags.ignore_permissions = False
 
@@ -219,7 +231,7 @@ def check_stock_availability(docname):
     {
         "status": "success" | "failed",
         "items": [list of problematic items],
-        "blockers": [list of locked orders]
+        "blockers": [list of approved orders]
     }
     """
     if not docname:
@@ -284,7 +296,7 @@ def check_stock_availability(docname):
                  if details.status == "Closed":
                      continue
 
-                 if details and (details.workflow_state == "Locked" or details.workflow_state == "Approved"):
+                 if details and details.workflow_state == "Approved":
                      if b.parent not in unique_blockers:
                          # Get reserved Qty for this item in this order
                          # We can query 'Sales Order Item' for qty
@@ -334,6 +346,110 @@ def apply_fix():
     else:
         frappe.db.set_value("Property Setter", name, "value", "1")
         print("Property Setter Updated")
+
+    # Qty in Sales Order Item
+    qty_name = "Sales Order Item-qty-allow_on_submit"
+    if not frappe.db.exists("Property Setter", qty_name):
+        p = frappe.new_doc("Property Setter")
+        p.name = qty_name
+        p.doctype_or_field = "DocField"
+        p.doc_type = "Sales Order Item"
+        p.field_name = "qty"
+        p.property = "allow_on_submit"
+        p.property_type = "Check"
+        p.value = "1"
+        p.insert(ignore_permissions=True)
+    
+    # Items table in Sales Order
+    items_name = "Sales Order-items-allow_on_submit"
+    if not frappe.db.exists("Property Setter", items_name):
+        p = frappe.new_doc("Property Setter")
+        p.name = items_name
+        p.doctype_or_field = "DocField"
+        p.doc_type = "Sales Order"
+        p.field_name = "items"
+        p.property = "allow_on_submit"
+        p.property_type = "Check"
+        p.value = "1"
+        p.insert(ignore_permissions=True)
     
     frappe.clear_cache(doctype="Sales Order")
+    frappe.clear_cache(doctype="Sales Order Item")
     return "Fix Applied"
+
+@frappe.whitelist()
+def release_stock_manually(docname, item_releases):
+    """
+    Manually release stock from an Approved Sales Order.
+    item_releases: JSON string or dict mapping item name (row ID) to qty_to_release
+    """
+    import json
+    if isinstance(item_releases, str):
+        item_releases = json.loads(item_releases)
+        
+    doc = frappe.get_doc("Sales Order", docname)
+    total_remaining = 0.0
+    
+    # Track items partially released for notification
+    released_items = []
+
+    for item in doc.items:
+        rel_qty = flt(item_releases.get(item.name, 0.0))
+        if rel_qty > 0:
+            if rel_qty > item.qty:
+                frappe.throw(_("Cannot release more than current quantity for item {0}").format(item.item_code))
+            
+            item.qty = item.qty - rel_qty
+            released_items.append({"item_code": item.item_code, "qty": rel_qty})
+            
+        total_remaining += item.qty
+        
+    if total_remaining <= 0:
+        doc.status = "Closed"
+    
+    # We also clear release request status if it was set
+    doc.custom_release_status = ""
+    
+    doc.flags.ignore_validate_update_after_submit = True
+    doc.save(ignore_permissions=True)
+    
+    # Force update reserved qty for all items
+    doc.update_reserved_qty()
+    
+    # Aggressively ensure Bin reflects the change
+    from erpnext.stock.utils import get_bin
+    for d in doc.items:
+        if d.item_code and d.warehouse:
+            bin_obj = get_bin(d.item_code, d.warehouse)
+            bin_obj.update_reserved_stock()
+            
+    if total_remaining <= 0:
+        # Using db_set to bypass any ERPNext status reset logic
+        doc.db_set("status", "Closed")
+
+    # Explicit Notification for those who requested release
+    if released_items:
+        # Find all candidates currently waiting for stock.
+        candidates = frappe.get_all("Sales Order", 
+            filters={"custom_release_status": "Requested", "docstatus": 0}, 
+            fields=["name", "owner"]
+        )
+        
+        item_list_str = ", ".join([f"{r['qty']} of {r['item_code']}" for r in released_items])
+        
+        for candidate in candidates:
+            # Re-verify stock for this specific candidate synchronously? 
+            # No, process_candidates is enqueued by doc.save() trigger anyway.
+            # But let's send a preliminary notification.
+            notification = frappe.new_doc("Notification Log")
+            notification.for_user = candidate.owner
+            notification.type = "Alert"
+            notification.subject = _("Stock Released (Partial)")
+            notification.email_content = _("Stock ({0}) has been released from Approved Order {1}. Your Sales Order {2} is being re-evaluated.").format(
+                item_list_str, docname, candidate.name
+            )
+            notification.document_name = candidate.name
+            notification.document_type = "Sales Order"
+            notification.insert(ignore_permissions=True)
+            
+    return {"status": "success", "closed": total_remaining <= 0}

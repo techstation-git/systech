@@ -1,4 +1,4 @@
-frappe.query_reports["Project Detailed Report"] = {
+frappe.query_reports["General Report {Project and Supplier}"] = {
     "filters": [
         {
             "fieldname": "timespan",
@@ -33,18 +33,35 @@ frappe.query_reports["Project Detailed Report"] = {
             "reqd": 1
         },
         {
+            "fieldname": "project",
+            "label": __("Project"),
+            "fieldtype": "Link",
+            "options": "Project"
+        },
+        {
             "fieldname": "supplier",
             "label": __("Supplier"),
             "fieldtype": "Link",
             "options": "Supplier"
-        },
-        {
-            "fieldname": "item_brand",
-            "label": __("Item Brand"),
-            "fieldtype": "Link",
-            "options": "Item Group"
         }
     ],
+    "after_datatable_render": function (datatable) {
+        $(".report-summary-item").css({
+            "cursor": "pointer",
+            "transition": "transform 0.1s"
+        }).on("click", function () {
+            frappe.set_route("query-report", "Detailed Report {Project and Supplier}", {
+                "from_date": frappe.query_report.get_filter_value("from_date"),
+                "to_date": frappe.query_report.get_filter_value("to_date"),
+                "project": frappe.query_report.get_filter_value("project"),
+                "supplier": frappe.query_report.get_filter_value("supplier")
+            });
+        }).on("mouseenter", function () {
+            $(this).css("transform", "translateY(-2px)");
+        }).on("mouseleave", function () {
+            $(this).css("transform", "translateY(0)");
+        });
+    },
     "onload": function (report) {
         // Add Send to Email button
         report.page.add_inner_button(__('Send to Email'), function () {
@@ -52,7 +69,7 @@ frappe.query_reports["Project Detailed Report"] = {
                 title: __('Email Report'),
                 fields: [
                     { fieldtype: 'Data', fieldname: 'email', label: __('To'), reqd: 1 },
-                    { fieldtype: 'Data', fieldname: 'subject', label: __('Subject'), default: 'Project Detailed Report' },
+                    { fieldtype: 'Data', fieldname: 'subject', label: __('Subject'), default: 'General Report {Project and Supplier}' },
                     { fieldtype: 'Select', fieldname: 'format', label: __('Format'), options: 'PDF\nExcel', default: 'PDF' }
                 ],
                 primary_action_label: __('Send'),
@@ -60,7 +77,7 @@ frappe.query_reports["Project Detailed Report"] = {
                     frappe.call({
                         method: 'systech.api.email.send_report_email',
                         args: {
-                            report_name: 'Project Detailed Report',
+                            report_name: 'General Report {Project and Supplier}',
                             filters: report.get_values(),
                             recipients: values.email,
                             subject: values.subject,

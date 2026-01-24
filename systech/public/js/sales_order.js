@@ -1,6 +1,6 @@
 frappe.ui.form.on('Sales Order', {
     refresh: function (frm) {
-        if (frm.doc.workflow_state === 'Locked' || frm.doc.workflow_state === 'Release Requested') {
+        if (frm.doc.workflow_state === 'Approved' || frm.doc.workflow_state === 'Release Requested') {
             // Check if current user is owner or manager
             let is_manager = frappe.user_roles.includes('Sales Manager') || frappe.user_roles.includes('System Manager');
             let is_owner = frm.doc.owner === frappe.session.user;
@@ -58,12 +58,12 @@ frappe.ui.form.on('Sales Order', {
         }
 
 
-        if (frm.doc.workflow_state === 'Locked') {
+        if (frm.doc.workflow_state === 'Approved' && frm.doc.status !== 'Closed') {
             // Hide standard buttons by removing them item by item
             // Using polling to capture late-loading buttons
             const hideButtons = () => {
                 // Double check state to prevent race conditions during navigation
-                if (frm.doc.workflow_state !== 'Locked') return;
+                if (frm.doc.workflow_state !== 'Approved') return;
 
                 const to_hide = [
                     // Create Menu Items
@@ -136,24 +136,71 @@ frappe.ui.form.on('Sales Order', {
                 </div>`
             );
 
-            if (frappe.user_roles.includes('Sales Manager') && frm.doc.workflow_state === 'Locked') {
-                frm.add_custom_button(__('Release'), function () {
-                    frappe.xcall('frappe.model.workflow.apply_workflow', {
-                        doc: frm.doc,
-                        action: 'Unreserve'
-                    }).then(() => {
-                        frappe.msgprint(__('Stock Released'));
-                        frm.reload_doc();
+            if (frappe.user_roles.includes('Sales Manager') && frm.doc.workflow_state === 'Approved') {
+                frm.add_custom_button(__('Release Stock'), function () {
+                    // Dialog for partial release
+                    let fields = frm.doc.items.map((item, idx) => {
+                        return [
+                            {
+                                fieldtype: 'Read Only',
+                                fieldname: `item_info_${idx}`,
+                                label: `Item ${idx + 1}: ${item.item_code}`,
+                                default: `${item.item_name} (Current: ${item.qty})`
+                            },
+                            {
+                                fieldtype: 'Float',
+                                fieldname: `release_qty_${idx}`,
+                                label: __('Qty to Release'),
+                                default: 0,
+                                reqd: 1
+                            },
+                            {
+                                fieldtype: 'Column Break'
+                            }
+                        ];
+                    }).flat();
+
+                    let d = new frappe.ui.Dialog({
+                        title: __('Release Stock Quantities'),
+                        fields: fields,
+                        primary_action_label: __('Release'),
+                        primary_action: function (values) {
+                            d.hide();
+
+                            let item_releases = {};
+                            frm.doc.items.forEach((item, idx) => {
+                                item_releases[item.name] = values[`release_qty_${idx}`];
+                            });
+
+                            frappe.call({
+                                method: 'systech.services.workflow.release_stock_manually',
+                                args: {
+                                    docname: frm.doc.name,
+                                    item_releases: item_releases
+                                },
+                                freeze: true,
+                                callback: function (r) {
+                                    if (!r.exc) {
+                                        frappe.show_alert({
+                                            message: r.message.closed ? __('Stock released and Order Closed') : __('Stock released and quantities updated'),
+                                            indicator: 'green'
+                                        });
+                                        frm.reload_doc();
+                                    }
+                                }
+                            });
+                        }
                     });
+                    d.show();
                 }).addClass('btn-primary');
             }
         }
 
-        // Add Request Release Button only if Locked
+        // Add Request Release Button only if Approved
         // And if the user is NOT the owner/manager (since they can just Release it themselves or via generic workflow)
         // Wait, the requirement is "show a button to request release of the stock..."
-        // If I am viewing SOMEONE ELSE'S Locked order, I want to request release.
-        if (frm.doc.workflow_state === 'Locked' && frm.doc.custom_release_status !== 'Requested' && frm.doc.owner !== frappe.session.user && !frappe.user_roles.includes('Sales Manager')) {
+        // If I am viewing SOMEONE ELSE'S Approved order, I want to request release.
+        if (frm.doc.workflow_state === 'Approved' && frm.doc.custom_release_status !== 'Requested' && frm.doc.owner !== frappe.session.user && !frappe.user_roles.includes('Sales Manager')) {
             frm.add_custom_button(__('Request Release'), function () {
                 frappe.confirm('Are you sure you want to request release of stock from this order?', function () {
                     frappe.call({
@@ -175,6 +222,13 @@ frappe.ui.form.on('Sales Order', {
 
     before_workflow_action: function (frm) {
         if (frm.selected_workflow_action === 'Submit To Manager') {
+            // Before submitting to manager, copy qty to original_qty if not already set
+            frm.doc.items.forEach(item => {
+                if (!item.original_qty) {
+                    frappe.model.set_value(item.doctype, item.name, 'original_qty', item.qty);
+                }
+            });
+
             let promise = new Promise((resolve, reject) => {
                 frappe.call({
                     method: 'systech.services.workflow.check_stock_availability',
@@ -205,19 +259,17 @@ frappe.ui.form.on('Sales Order', {
                                             </div>
                                         `
                                     },
-                                    // ... existing fields ...
-
                                     {
                                         fieldtype: 'HTML',
                                         fieldname: 'locked_orders_title',
-                                        options: `<h5 class="mt-4">${__('Locked Sales Orders utilizing this stock:')}</h5>`
+                                        options: `<h5 class="mt-4">${__('Approved Sales Orders utilizing this stock:')}</h5>`
                                     },
                                     {
                                         fieldtype: 'HTML',
                                         fieldname: 'locked_orders_table',
                                         options: (() => {
                                             if (!r.message.blockers || r.message.blockers.length === 0) {
-                                                return `<p class="text-muted">${__('No other Locked orders found.')}</p>`;
+                                                return `<p class="text-muted">${__('No other Approved orders found.')}</p>`;
                                             }
                                             return `
                                                 <table class="table table-bordered table-condensed">
@@ -251,8 +303,7 @@ frappe.ui.form.on('Sales Order', {
                                             `;
                                         })()
                                     }
-                                ]
-                                ,
+                                ],
                                 primary_action_label: __('Close'),
                                 primary_action: function () {
                                     d.hide();
@@ -296,6 +347,58 @@ frappe.ui.form.on('Sales Order', {
                         }
                     }
                 });
+            });
+            return promise;
+        }
+
+        if (frm.selected_workflow_action === 'Approve') {
+            let promise = new Promise((resolve, reject) => {
+                // Safeguard: Brief delay to let UI stabilize and avoid race conditions
+                setTimeout(() => {
+                    // Force cleanup of any stray backdrops that might be causing "blur"
+                    $('.modal-backdrop').fadeOut(100, function () { $(this).remove(); });
+
+                    let fields = [];
+                    frm.doc.items.forEach((item, idx) => {
+                        fields.push({
+                            fieldtype: 'Read Only',
+                            fieldname: `item_info_${idx}`,
+                            label: `Item ${idx + 1}: ${item.item_code}`,
+                            default: `${item.item_name} (Requested: ${item.qty})`
+                        });
+                        fields.push({
+                            fieldtype: 'Float',
+                            fieldname: `approve_qty_${idx}`,
+                            label: __('Qty to Approve'),
+                            default: item.qty,
+                            reqd: 1
+                        });
+                    });
+
+                    let d = new frappe.ui.Dialog({
+                        title: __('Approve Quantities'),
+                        fields: fields,
+                        primary_action_label: __('Approve'),
+                        primary_action: function (values) {
+                            // Update Doc values
+                            frm.doc.items.forEach((item, idx) => {
+                                let approved_qty = values[`approve_qty_${idx}`];
+                                item.approved_qty = approved_qty;
+                                item.qty = approved_qty;
+                            });
+
+                            d.hide();
+                            // Small delay before resolving to ensure modal hiding logic completes
+                            setTimeout(resolve, 300);
+                        },
+                        secondary_action_label: __('Cancel'),
+                        secondary_action: function () {
+                            d.hide();
+                            reject();
+                        }
+                    });
+                    d.show();
+                }, 100);
             });
             return promise;
         }
