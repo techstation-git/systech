@@ -116,18 +116,32 @@ def request_release(docname, source_docname=None):
         frappe.flags.ignore_permissions = False
     
     managers = [u.parent for u in frappe.get_all("Has Role", filters={"role": "Sales Manager", "parenttype": "User"}, fields=["parent"])]
+    manager_emails = [frappe.db.get_value("User", m, "email") for m in managers]
+    manager_emails = [e for e in manager_emails if e]
     
+    subject = _("Stock Release Requested: {0}").format(docname)
+    content = _("User {0} has requested to release stock from Approved Sales Order {1}. Reference Source Order: {2}").format(
+        frappe.session.user, docname, source_docname or "N/A"
+    )
+
     for manager in managers:
         notification = frappe.new_doc("Notification Log")
         notification.for_user = manager
         notification.type = "Alert"
-        notification.subject = _("Stock Release Requested")
-        notification.email_content = _("User {0} has requested to release stock from Approved Sales Order {1}. Reference Source Order: {2}").format(
-            frappe.session.user, docname, source_docname or "N/A"
-        )
+        notification.subject = subject
+        notification.email_content = content
         notification.document_type = "Sales Order"
         notification.document_name = docname
         notification.insert(ignore_permissions=True)
+    
+    if manager_emails:
+        frappe.sendmail(
+            recipients=manager_emails,
+            subject=subject,
+            message=content,
+            reference_doctype="Sales Order",
+            reference_name=docname
+        )
     
     # Update Workflow State -> Custom Field 'custom_release_status'
     # User removed 'Release Requested' from workflow states.
@@ -208,14 +222,27 @@ def process_candidates():
                 c_doc.save(ignore_permissions=True)
                 
                 # Notify Owner
+                subject = _("Stock Available - Order Promoted: {0}").format(candidate.name)
+                content = _("Stock is now available for your Sales Order {0}. It has been moved to 'Pending Manager Approval'.").format(candidate.name)
+
                 notification = frappe.new_doc("Notification Log")
                 notification.for_user = candidate.owner
                 notification.type = "Alert"
-                notification.subject = _("Stock Available - Order Promoted")
-                notification.email_content = _("Stock is now available for your Sales Order {0}. It has been moved to 'Pending Manager Approval'.").format(candidate.name)
+                notification.subject = subject
+                notification.email_content = content
                 notification.document_name = candidate.name
                 notification.document_type = "Sales Order"
                 notification.insert(ignore_permissions=True)
+                
+                owner_email = frappe.db.get_value("User", candidate.owner, "email")
+                if owner_email:
+                    frappe.sendmail(
+                        recipients=[owner_email],
+                        subject=subject,
+                        message=content,
+                        reference_doctype="Sales Order",
+                        reference_name=candidate.name
+                    )
                 
                 frappe.db.commit()
             except Exception as e:
@@ -441,15 +468,28 @@ def release_stock_manually(docname, item_releases):
             # Re-verify stock for this specific candidate synchronously? 
             # No, process_candidates is enqueued by doc.save() trigger anyway.
             # But let's send a preliminary notification.
+            subject = _("Stock Released (Partial): {0}").format(docname)
+            content = _("Stock ({0}) has been released from Approved Order {1}. Your Sales Order {2} is being re-evaluated.").format(
+                item_list_str, docname, candidate.name
+            )
+
             notification = frappe.new_doc("Notification Log")
             notification.for_user = candidate.owner
             notification.type = "Alert"
-            notification.subject = _("Stock Released (Partial)")
-            notification.email_content = _("Stock ({0}) has been released from Approved Order {1}. Your Sales Order {2} is being re-evaluated.").format(
-                item_list_str, docname, candidate.name
-            )
+            notification.subject = subject
+            notification.email_content = content
             notification.document_name = candidate.name
             notification.document_type = "Sales Order"
             notification.insert(ignore_permissions=True)
+            
+            owner_email = frappe.db.get_value("User", candidate.owner, "email")
+            if owner_email:
+                frappe.sendmail(
+                    recipients=[owner_email],
+                    subject=subject,
+                    message=content,
+                    reference_doctype="Sales Order",
+                    reference_name=candidate.name
+                )
             
     return {"status": "success", "closed": total_remaining <= 0}

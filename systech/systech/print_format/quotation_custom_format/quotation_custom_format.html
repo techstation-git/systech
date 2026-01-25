@@ -1,0 +1,246 @@
+<style>
+    @font-face {
+        font-family: 'Amiri';
+        font-style: normal;
+        font-weight: 400;
+        src: url(https://fonts.gstatic.com/s/amiri/v26/J7afp9id-8g59Ad6nS5X.woff2) format('woff2');
+    }
+
+    .print-format {
+        font-family: 'Amiri', 'Roboto', sans-serif;
+        direction: rtl;
+        text-align: right;
+        font-size: 12px;
+        color: #333;
+    }
+
+    .header-table {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .logo-section img {
+        max-height: 80px;
+    }
+
+    .company-details {
+        text-align: left;
+        font-size: 14px;
+        color: #1a3b5d;
+        font-weight: bold;
+    }
+
+    .quotation-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin: 20px 0;
+        border-bottom: 2px solid #1a3b5d;
+        padding-bottom: 5px;
+        color: #1a3b5d;
+    }
+
+    .info-grid {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        gap: 20px;
+    }
+
+    .info-box {
+        flex: 1;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .info-row {
+        margin-bottom: 5px;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #1a3b5d;
+        width: 100px;
+        display: inline-block;
+    }
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .items-table th {
+        background-color: #1a3b5d;
+        color: white;
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .items-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        vertical-align: top;
+    }
+
+    .group-row {
+        background-color: #eeeeee;
+        font-weight: bold;
+    }
+
+    .group-title {
+        text-decoration: underline;
+    }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
+
+    .totals-section {
+        width: 300px;
+        margin-right: auto;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+    }
+
+    .grand-total {
+        font-weight: bold;
+        font-size: 16px;
+        color: #d9534f;
+        border-top: 1px solid #ddd;
+        margin-top: 10px;
+        padding-top: 5px;
+    }
+</style>
+
+<div class="print-format">
+    <!-- Header -->
+    <table class="header-table">
+        <tr>
+            <td width="50%" class="logo-section">
+                {% if doc.company_logo %}
+                <img src="{{ doc.company_logo }}" alt="Logo">
+                {% else %}
+                <div style="font-size: 32px; font-weight: bold; color: #1a3b5d;">ST</div>
+                {% endif %}
+            </td>
+            <td width="50%" class="company-details">
+                <div style="font-size: 18px;">سيستمز تكنولوجي</div>
+                <div>للاعمال الكهروميكانيكية</div>
+                <div style="font-weight: normal; font-size: 12px; margin-top: 5px;">مول 21، بنفسج 4، التجمع الاول، القاهرة</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="quotation-title">
+        Quotation - عرض أسعار
+    </div>
+
+    <!-- Quote Details & Customer -->
+    <div class="info-grid">
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">رقم العرض:</span>
+                <span>{{ doc.name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">التاريخ:</span>
+                <span>{{ doc.get_formatted("transaction_date") }}</span>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">العرض مقدم الى:</span>
+                <span>{{ doc.customer_name }}</span>
+            </div>
+            {% if doc.contact_display %}
+            <div class="info-row">
+                <span class="info-label">عناية:</span>
+                <span>{{ doc.contact_display }}</span>
+            </div>
+            {% endif %}
+            {% if doc.project %}
+            <div class="info-row">
+                <span class="info-label">اسم المشروع:</span>
+                <span>{{ doc.project }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th width="5%">م</th>
+                <th width="50%">الوصف</th>
+                <th width="10%">الوحدة</th>
+                <th width="10%">الكمية</th>
+                <th width="10%">سعر الوحدة</th>
+                <th width="15%">المبلغ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set ns = namespace(group_index=0, prev_group="") %}
+            {% for item in doc.items %}
+                {# Grouping logic (using item_group as a proxy for section headers) #}
+                {% if item.item_group != ns.prev_group %}
+                    {% set ns.group_index = ns.group_index + 1 %}
+                    {% set ns.prev_group = item.item_group %}
+                    <tr class="group-row">
+                        <td class="text-center">{{ ns.group_index }}</td>
+                        <td colspan="5" class="group-title">{{ item.item_group }}</td>
+                    </tr>
+                {% endif %}
+                
+                <tr>
+                    <td class="text-center">{{ ns.group_index }}.{{ loop.index }}</td>
+                    <td>
+                        <div style="font-weight: bold;">{{ item.item_name }}</div>
+                        <div style="font-size: 10px; color: #666; width: 100%;">{{ item.description or "" }}</div>
+                    </td>
+                    <td class="text-center">{{ item.uom or _("عدد") }}</td>
+                    <td class="text-center">{{ item.get_formatted("qty") }}</td>
+                    <td class="text-right">{{ item.get_formatted("rate") }}</td>
+                    <td class="text-right">{{ item.get_formatted("amount") }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Totals -->
+    <div class="totals-section">
+        <div class="total-row">
+            <span>اجمالي المبلغ:</span>
+            <span>{{ doc.get_formatted("total") }}</span>
+        </div>
+        {% for tax in doc.taxes %}
+        <div class="total-row">
+            <span>{{ tax.description }}:</span>
+            <span>{{ tax.get_formatted("tax_amount") }}</span>
+        </div>
+        {% endfor %}
+        <div class="total-row grand-total">
+            <span>الاجمالي النهائي:</span>
+            <span>{{ doc.get_formatted("grand_total") or doc.get_formatted("base_grand_total") }}</span>
+        </div>
+    </div>
+
+    <!-- Footer Notes -->
+    {% if doc.terms %}
+    <div style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px;">
+        <div style="font-weight: bold; margin-bottom: 5px;">الشروط والأحكام:</div>
+        <div style="white-space: pre-line;">{{ doc.terms }}</div>
+    </div>
+    {% endif %}
+</div>
