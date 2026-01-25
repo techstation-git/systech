@@ -1,5 +1,47 @@
 [
  {
+  "completed_by": "hassan@gmail.com",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 10:33:56.239039",
+  "name": "9saebr3opd",
+  "permitted_roles": [
+   {
+    "parent": "9saebr3opd",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00033",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 10:34:16.794440",
+  "name": "a2ojbs2ffs",
+  "permitted_roles": [
+   {
+    "parent": "a2ojbs2ffs",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00030",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
   "completed_by": "mohammed@gmail.com",
   "completed_by_role": "Sales User",
   "docstatus": 0,
@@ -4713,8 +4755,8 @@
   "workflow_state": "Pending Manager Approval"
  },
  {
-  "completed_by": null,
-  "completed_by_role": null,
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
   "docstatus": 0,
   "doctype": "Workflow Action",
   "modified": "2026-01-24 10:16:54.195337",
@@ -4729,6 +4771,111 @@
   ],
   "reference_doctype": "Sales Order",
   "reference_name": "SAL-ORD-2026-00032",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 11:19:42.469622",
+  "name": "4mgfjbvg5k",
+  "permitted_roles": [
+   {
+    "parent": "4mgfjbvg5k",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00033",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Manager Approval"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 11:24:34.595189",
+  "name": "7hppc490gh",
+  "permitted_roles": [
+   {
+    "parent": "7hppc490gh",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00033",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": "mohammed@gmail.com",
+  "completed_by_role": "Sales User",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 11:25:47.360382",
+  "name": "88hvticdpm",
+  "permitted_roles": [
+   {
+    "parent": "88hvticdpm",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales User"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00034",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "Sales Manager",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 11:28:12.312959",
+  "name": "9lre8t9dgu",
+  "permitted_roles": [
+   {
+    "parent": "9lre8t9dgu",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00034",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending Manager Approval"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-01-24 11:45:50.595953",
+  "name": "k0hk34b540",
+  "permitted_roles": [
+   {
+    "parent": "k0hk34b540",
+    "parentfield": "permitted_roles",
+    "parenttype": "Workflow Action",
+    "role": "Sales Manager"
+   }
+  ],
+  "reference_doctype": "Sales Order",
+  "reference_name": "SAL-ORD-2026-00034",
   "status": "Open",
   "user": null,
   "workflow_state": "Approved"
