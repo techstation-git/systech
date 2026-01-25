@@ -121,16 +121,17 @@ def unreserve_stock(sales_order_name):
 
 	doc = frappe.get_doc("Sales Order", sales_order_name)
 
-	if doc.workflow_state != "Locked":
-		frappe.throw(_("Sales Order must be in 'Locked' state to unreserve stock."))
+	if doc.workflow_state != "Approved":
+		frappe.throw(_("Sales Order must be in 'Approved' state to unreserve stock."))
 	
-	if doc.status == "Closed":
-		frappe.msgprint(_("Sales Order is already closed."))
+	if doc.status == "Cancelled":
+		frappe.msgprint(_("Sales Order is already cancelled."))
 		return
 
 	# Closing the Sales Order unreserves the stock
-	doc.db_set("workflow_state", "Unreserved and Closed")
-	doc.update_status("Closed")
+	doc.db_set("workflow_state", "Cancelled")
+	doc.db_set("status", "Cancelled")
+	doc.db_set("custom_release_status", "")
 	
 	frappe.msgprint(_("Sales Order {0} has been closed and stock unreserved.").format(sales_order_name))
 
@@ -141,6 +142,10 @@ def process_workflow_action(docname, action):
 	"""
 	if "Sales Manager" not in frappe.get_roles():
 		frappe.throw(_("Only Sales Managers can perform this action."))
+
+	if action == "Release":
+		# Virtual Action: For the dashboard button, 'Release' means unreserve and close the blocker.
+		return unreserve_stock(docname)
 
 	doc = frappe.get_doc("Sales Order", docname)
 	apply_workflow(doc, action)
@@ -159,17 +164,21 @@ def get_dashboard_stats():
 
 	data = {}
 	
-	# Release Requested
-	data['release'] = frappe.db.count('Sales Order', filters={'workflow_state': 'Release Requested', 'docstatus': 1})
+	# Release Requested (uses custom field) - Exclude Cancelled
+	data['release'] = frappe.db.count('Sales Order', filters={
+		'custom_release_status': 'Requested', 
+		'workflow_state': ['!=', 'Cancelled'],
+		'docstatus': ['!=', 2]
+	})
 	
 	# Pending Approval
-	data['approval'] = frappe.db.count('Sales Order', filters={'workflow_state': 'Pending Manager Approval'})
+	data['approval'] = frappe.db.count('Sales Order', filters={'workflow_state': 'Pending Manager Approval', 'docstatus': ['!=', 2]})
 	
-	# Locked (and qty)
+	# Locked (mapped to 'Approved' workflow state)
 	locked_stats = frappe.db.sql("""
 		SELECT count(name) as count, sum(total_qty) as total_qty 
 		FROM `tabSales Order` 
-		WHERE workflow_state = 'Locked' AND docstatus = 1 AND status != 'Closed'
+		WHERE workflow_state = 'Approved' AND docstatus = 1 AND status != 'Cancelled'
 	""", as_dict=True)[0]
 	
 	data['locked_count'] = locked_stats.count or 0
@@ -187,13 +196,20 @@ def get_stock_release_list(workflow_state, status=None):
 	if "Sales Manager" not in frappe.get_roles():
 		return []
 
-	conditions = ["workflow_state = %(workflow_state)s", "docstatus != 2"] # Exclude cancelled
-	values = {"workflow_state": workflow_state}
+	conditions = ["docstatus != 2"]
+	values = {}
 
-	# Custom handling for the filter logic passed from JS
-	if workflow_state == 'Locked':
-		conditions.append("status != 'Closed'")
-		conditions.append("docstatus = 1") # Locked must be submitted
+	# Handle Virtual States / Mappings
+	if workflow_state == 'Release Requested':
+		conditions.append("custom_release_status = 'Requested'")
+		conditions.append("workflow_state != 'Cancelled'")
+	elif workflow_state == 'Locked':
+		conditions.append("workflow_state = 'Approved'")
+		conditions.append("docstatus = 1")
+		conditions.append("status != 'Cancelled'")
+	else:
+		conditions.append("workflow_state = %(workflow_state)s")
+		values["workflow_state"] = workflow_state
 
 	where_clause = " AND ".join(conditions)
 
