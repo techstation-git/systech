@@ -1,64 +1,59 @@
-frappe.query_reports["Detailed Report {Project and Customer}"] = {
+frappe.query_reports["Project Detailed Report"] = {
     "filters": [
-        {
-            "fieldname": "timespan",
-            "label": __("Range"),
-            "fieldtype": "Select",
-            "options": "Monthly\nYearly\nCustom",
-            "default": "Monthly",
-            "reqd": 1,
-            "on_change": function () {
-                let timespan = frappe.query_report.get_filter_value('timespan');
-                if (timespan === 'Monthly') {
-                    frappe.query_report.set_filter_value('from_date', frappe.datetime.month_start());
-                    frappe.query_report.set_filter_value('to_date', frappe.datetime.month_end());
-                } else if (timespan === 'Yearly') {
-                    frappe.query_report.set_filter_value('from_date', frappe.datetime.year_start());
-                    frappe.query_report.set_filter_value('to_date', frappe.datetime.year_end());
-                }
-            }
-        },
         {
             "fieldname": "from_date",
             "label": __("From Date"),
             "fieldtype": "Date",
-            "default": frappe.datetime.month_start(),
-            "reqd": 1
+            "default": frappe.datetime.month_start()
         },
         {
             "fieldname": "to_date",
             "label": __("To Date"),
             "fieldtype": "Date",
-            "default": frappe.datetime.month_end(),
-            "reqd": 1
-        },
-        {
-            "fieldname": "project",
-            "label": __("Project"),
-            "fieldtype": "Link",
-            "options": "Project"
+            "default": frappe.datetime.month_end()
         },
         {
             "fieldname": "customer",
             "label": __("Customer"),
             "fieldtype": "Link",
-            "options": "Customer"
+            "options": "Customer",
+            "on_change": function () {
+                let customer = frappe.query_report.get_filter_value('customer');
+                if (customer) {
+                    frappe.query_report.get_filter('project').get_query = function () {
+                        return { filters: { customer: customer } };
+                    };
+                } else {
+                    frappe.query_report.get_filter('project').get_query = null;
+                }
+                frappe.query_report.refresh();
+            }
         },
         {
-            "fieldname": "item_brand",
-            "label": __("Item Brand"),
+            "fieldname": "project",
+            "label": __("Project"),
             "fieldtype": "Link",
-            "options": "Item Group"
+            "options": "Project",
+            "on_change": function () {
+                let project = frappe.query_report.get_filter_value('project');
+                if (project && !frappe.query_report.get_filter_value('customer')) {
+                    frappe.db.get_value('Project', project, 'customer', (r) => {
+                        if (r && r.customer) {
+                            frappe.query_report.set_filter_value('customer', r.customer);
+                        }
+                    });
+                }
+                frappe.query_report.refresh();
+            }
         }
     ],
     "onload": function (report) {
-        // Add Send to Email button
         report.page.add_inner_button(__('Send to Email'), function () {
             let d = new frappe.ui.Dialog({
                 title: __('Email Report'),
                 fields: [
                     { fieldtype: 'Data', fieldname: 'email', label: __('To'), reqd: 1 },
-                    { fieldtype: 'Data', fieldname: 'subject', label: __('Subject'), default: 'Detailed Report {Project and Customer}' },
+                    { fieldtype: 'Data', fieldname: 'subject', label: __('Subject'), default: 'Project Detailed Report' },
                     { fieldtype: 'Select', fieldname: 'format', label: __('Format'), options: 'PDF\nExcel', default: 'PDF' }
                 ],
                 primary_action_label: __('Send'),
@@ -66,11 +61,11 @@ frappe.query_reports["Detailed Report {Project and Customer}"] = {
                     frappe.call({
                         method: 'systech.api.email.send_report_email',
                         args: {
-                            report_name: 'Detailed Report {Project and Customer}',
+                            report_name: 'Project Detailed Report',
                             filters: report.get_values(),
                             recipients: values.email,
                             subject: values.subject,
-                            message: 'Please find attached.',
+                            message: 'Please find attached the Project Detailed Report.',
                             format: values.format
                         },
                         freeze: true,
