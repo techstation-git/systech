@@ -15,8 +15,10 @@ def before_workflow_action(doc, transition):
         if transition.action == "Approve":
             total_remaining = sum([flt(d.qty) for d in doc.items])
             if total_remaining <= 0:
-                doc.status = "Closed"
-                doc.db_set("status", "Closed")
+                doc.status = "Cancelled"
+                doc.workflow_state = "Cancelled"
+                doc.db_set("status", "Cancelled")
+                doc.db_set("workflow_state", "Cancelled")
 
         # Check 2: Final Release (Locked -> Released)
         # Safety check (optional based on new flow, but good to keep)
@@ -432,7 +434,8 @@ def release_stock_manually(docname, item_releases):
         total_remaining += item.qty
         
     if total_remaining <= 0:
-        doc.status = "Closed"
+        doc.status = "Cancelled"
+        doc.workflow_state = "Cancelled"
     
     # We also clear release request status if it was set
     doc.custom_release_status = ""
@@ -452,7 +455,8 @@ def release_stock_manually(docname, item_releases):
             
     if total_remaining <= 0:
         # Using db_set to bypass any ERPNext status reset logic
-        doc.db_set("status", "Closed")
+        doc.db_set("status", "Cancelled")
+        doc.db_set("workflow_state", "Cancelled")
 
     # Explicit Notification for those who requested release
     if released_items:
