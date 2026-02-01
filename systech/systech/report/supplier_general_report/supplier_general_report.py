@@ -50,7 +50,7 @@ def get_data(filters):
         WHERE pi.docstatus = 1
         {date_condition}
     """
-    params = {}
+        
     if supplier:
         sql += " AND pi.supplier = %(supplier)s"
         params["supplier"] = supplier
