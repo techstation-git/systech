@@ -8,9 +8,10 @@ def before_workflow_action(doc, transition):
     """
     if doc.doctype == "Sales Order":
         # Check 1: Initial Submission (Draft -> Pending)
-        # Prevent reservation if stock is insufficient.
-        if transition.action == "Submit To Manager":
-            validate_stock_availability(doc)
+        # DISABLED: Stock validation moved to Delivery Note creation (standard ERPNext behavior)
+        # if transition.action == "Submit To Manager":
+        #     validate_stock_availability(doc)
+        pass  # Stock is now reserved when Delivery Note is created, not on SO approval
             
         if transition.action == "Approve":
             total_remaining = sum([flt(d.qty) for d in doc.items])

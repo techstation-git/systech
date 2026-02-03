@@ -143,9 +143,9 @@ doc_events = {
 	# "Item": {
 	# 	"validate": "systech.services.rest.validate_item_barcode"
 	# },
-	"Purchase Receipt": {
-		"validate": "systech.services.rest.validate_transaction_barcodes"
-	},
+	# "Purchase Receipt": {
+	# 	"validate": "systech.services.rest.validate_transaction_barcodes"
+	# },
 	"Stock Entry": {
 		"validate": "systech.services.rest.validate_transaction_barcodes"
 	},
