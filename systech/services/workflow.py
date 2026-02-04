@@ -51,7 +51,22 @@ def validate_stock_availability(doc):
         )
         
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
-        reserved = flt(bin_data.reserved_qty) if bin_data else 0.0
+        # Calculate Reserved Qty from Current Year Orders Only
+        import datetime
+        current_year_start = f"{datetime.date.today().year}-01-01"
+        
+        reserved_data = frappe.db.sql("""
+            SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
+            FROM `tabSales Order` t1, `tabSales Order Item` t2
+            WHERE t1.name = t2.parent
+            AND t2.item_code = %s
+            AND t2.warehouse = %s
+            AND t1.docstatus = 1
+            AND t1.status != 'Closed'
+            AND t1.transaction_date >= %s
+        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+        
+        reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
         # Available for NEW reservation
         available = actual - reserved
@@ -345,7 +360,24 @@ def check_stock_availability(docname):
         )
         
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
-        reserved = flt(bin_data.reserved_qty) if bin_data else 0.0
+        actual = flt(bin_data.actual_qty) if bin_data else 0.0
+        
+        # Calculate Reserved Qty from Current Year Orders Only
+        import datetime
+        current_year_start = f"{datetime.date.today().year}-01-01"
+        
+        reserved_data = frappe.db.sql("""
+            SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
+            FROM `tabSales Order` t1, `tabSales Order Item` t2
+            WHERE t1.name = t2.parent
+            AND t2.item_code = %s
+            AND t2.warehouse = %s
+            AND t1.docstatus = 1
+            AND t1.status != 'Closed'
+            AND t1.transaction_date >= %s
+        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+        
+        reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
         # Available for NEW reservation
         available = actual - reserved
@@ -451,7 +483,22 @@ def validate_dn_stock(docname):
         )
         
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
-        reserved = flt(bin_data.reserved_qty) if bin_data else 0.0
+        # Calculate Reserved Qty from Current Year Orders Only
+        import datetime
+        current_year_start = f"{datetime.date.today().year}-01-01"
+        
+        reserved_data = frappe.db.sql("""
+            SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
+            FROM `tabSales Order` t1, `tabSales Order Item` t2
+            WHERE t1.name = t2.parent
+            AND t2.item_code = %s
+            AND t2.warehouse = %s
+            AND t1.docstatus = 1
+            AND t1.status != 'Closed'
+            AND t1.transaction_date >= %s
+        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+        
+        reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
         # Calculate Available for THIS Delivery Note
         # If this DN is linked to a Sales Order, that SO's reserved qty counts as "Available" for this DN.
