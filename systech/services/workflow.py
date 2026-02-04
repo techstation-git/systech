@@ -159,8 +159,17 @@ def request_release(docname, source_docname=None):
     if source_docname:
         frappe.flags.ignore_permissions = True
         try:
-            source_doc = frappe.get_doc("Sales Order", source_docname)
-            if source_doc.custom_release_status != "Requested":
+            # Determine DocType (Sales Order or Delivery Note)
+            if source_docname.startswith("DN-") or frappe.db.exists("Delivery Note", source_docname):
+                source_doctype = "Delivery Note"
+            else:
+                source_doctype = "Sales Order"
+                
+            source_doc = frappe.get_doc(source_doctype, source_docname)
+            # Delivery Note might not have 'custom_release_status' field if not added yet.
+            # Assuming custom field exists or we add it. 
+            # For now, let's just log or msgprint if field missing to avoid error.
+            if hasattr(source_doc, "custom_release_status") and source_doc.custom_release_status != "Requested":
                 source_doc.custom_release_status = "Requested"
                 source_doc.save(ignore_permissions=True)
         finally:
@@ -253,6 +262,51 @@ def process_candidates():
             finally:
                 frappe.flags.ignore_permissions = False
 
+    # Process Delivery Note Candidates
+    dn_candidates = frappe.get_all("Delivery Note", 
+        filters={"custom_release_status": "Requested", "docstatus": 0}, 
+        fields=["name", "owner"]
+    )
+    
+    for candidate in dn_candidates:
+        res = validate_dn_stock(candidate.name)
+        if res.get("status") == "success":
+            frappe.flags.ignore_permissions = True
+            try:
+                c_doc = frappe.get_doc("Delivery Note", candidate.name)
+                if c_doc.custom_release_status != "Requested": continue
+                
+                c_doc.custom_release_status = "" # Clear request
+                c_doc.save(ignore_permissions=True)
+                
+                # Notify Owner
+                subject = _("Stock Available - Delivery Note: {0}").format(candidate.name)
+                content = _("Stock is now available for your Delivery Note {0}. You can now Submit it.").format(candidate.name)
+
+                notification = frappe.new_doc("Notification Log")
+                notification.for_user = candidate.owner
+                notification.type = "Alert"
+                notification.subject = subject
+                notification.email_content = content
+                notification.document_name = candidate.name
+                notification.document_type = "Delivery Note"
+                notification.insert(ignore_permissions=True)
+                
+                owner_email = frappe.db.get_value("User", candidate.owner, "email")
+                if owner_email:
+                    frappe.sendmail(
+                        recipients=[owner_email],
+                        subject=subject,
+                        message=content,
+                        reference_doctype="Delivery Note",
+                        reference_name=candidate.name
+                    )
+                frappe.db.commit()
+            except Exception as e:
+                frappe.logger().error(f"[Systech Workflow] Failed to update DN {candidate.name}: {str(e)}")
+            finally:
+                frappe.flags.ignore_permissions = False
+
 @frappe.whitelist()
 def check_stock_availability(docname):
     """
@@ -309,6 +363,9 @@ def check_stock_availability(docname):
             
             # Find Conflicting Locked Orders
             # These are orders acting as 'blockers' (Locked State)
+            import datetime
+            current_year_start = f"{datetime.date.today().year}-01-01"
+            
             blockers = frappe.db.sql("""
                 SELECT DISTINCT parent 
                 FROM `tabSales Order Item`
@@ -316,7 +373,8 @@ def check_stock_availability(docname):
                 AND warehouse = %s
                 AND docstatus = 1
                 AND parent != %s
-            """, (item.item_code, warehouse, doc.name), as_dict=True)
+                AND parent IN (SELECT name FROM `tabSales Order` WHERE transaction_date >= %s)
+            """, (item.item_code, warehouse, doc.name, current_year_start), as_dict=True)
             
             for b in blockers:
                  # Check workflow state
@@ -349,6 +407,113 @@ def check_stock_availability(docname):
     for name, data in unique_blockers.items():
         data["items"] = list(data["items"])
         final_blockers.append(data)
+
+    if problematic_items:
+        return {
+            "status": "failed",
+            "items": problematic_items,
+            "blockers": final_blockers
+        }
+    
+    return {"status": "success"}
+
+@frappe.whitelist()
+def validate_dn_stock(docname):
+    """
+    Validate stock for Delivery Note against Actual vs Reserved.
+    """
+    if not docname:
+        return {"status": "failed", "message": "Missing DocName"}
+        
+    doc = frappe.get_doc("Delivery Note", docname)
+    problematic_items = []
+    unique_blockers = {}
+
+    for item in doc.items:
+        if not item.item_code:
+            continue
+            
+        # Delivery Note Item does not have is_stock_item, so we must fetch it from Item master
+        is_stock_item = frappe.db.get_value("Item", item.item_code, "is_stock_item")
+        if not is_stock_item:
+            continue
+
+            
+        warehouse = item.warehouse
+        if not warehouse:
+            continue
+            
+        # Get Stock Info
+        bin_data = frappe.db.get_value("Bin", 
+            {"item_code": item.item_code, "warehouse": warehouse}, 
+            ["actual_qty", "reserved_qty"], 
+            as_dict=True
+        )
+        
+        actual = flt(bin_data.actual_qty) if bin_data else 0.0
+        reserved = flt(bin_data.reserved_qty) if bin_data else 0.0
+        
+        # Calculate Available for THIS Delivery Note
+        # If this DN is linked to a Sales Order, that SO's reserved qty counts as "Available" for this DN.
+        reserved_for_me = 0.0
+        if item.against_sales_order:
+            # How much is reserved by the linked SO Item?
+            # Usually Remaining Qty (qty - delivered_qty) is what is reserved.
+            so_item_data = frappe.db.get_value("Sales Order Item", 
+                {"parent": item.against_sales_order, "item_code": item.item_code}, 
+                ["qty", "delivered_qty"],
+                as_dict=True
+            )
+            if so_item_data:
+                reserved_for_me = flt(so_item_data.qty) - flt(so_item_data.delivered_qty)
+            else:
+                reserved_for_me = 0.0
+            
+        # Effective Available = Actual - (Reserved_Global - Reserved_For_Me)
+        # = Actual - Reserved_Others
+        others_reserved = max(0, reserved - reserved_for_me)
+        available = actual - others_reserved
+        
+        # Check against DN Required Qty
+        if available < item.qty:
+             problematic_items.append({
+                "item_code": item.item_code,
+                "required": item.qty,
+                "available": available,
+                "actual": actual,
+                "reserved": reserved,
+                "reserved_for_me": reserved_for_me
+            })
+            
+             # Find Blockers (SOs that contribute to 'others_reserved')
+             import datetime
+             current_year_start = f"{datetime.date.today().year}-01-01"
+             
+             blockers = frappe.db.sql("""
+                SELECT DISTINCT parent 
+                FROM `tabSales Order Item`
+                WHERE item_code = %s
+                AND warehouse = %s
+                AND docstatus = 1
+                AND parent != %s
+                AND parent IN (SELECT name FROM `tabSales Order` WHERE transaction_date >= %s)
+            """, (item.item_code, warehouse, item.against_sales_order or "", current_year_start), as_dict=True)
+            
+             for b in blockers:
+                 details = frappe.db.get_value("Sales Order", b.parent, ["workflow_state", "customer", "owner", "status"], as_dict=True)
+                 if details.status == "Closed": continue
+                 
+                 if details.workflow_state == "Approved":
+                     if b.parent not in unique_blockers:
+                         item_qty = frappe.db.get_value("Sales Order Item", {"parent": b.parent, "item_code": item.item_code}, "qty")
+                         unique_blockers[b.parent] = {
+                             "name": b.parent,
+                             "customer": details.customer,
+                             "owner": details.owner,
+                             "qty": item_qty
+                         }
+
+    final_blockers = list(unique_blockers.values())
 
     if problematic_items:
         return {
@@ -498,3 +663,24 @@ def release_stock_manually(docname, item_releases):
                 )
             
     return {"status": "success", "closed": total_remaining <= 0}
+
+def enforce_dn_stock(doc, method=None):
+    """
+    Hook to strictly enforce stock availability on Delivery Note submission.
+    This ensures that even if client-side check is ignored, we block submission.
+    """
+    if doc.docstatus == 1: # On Submit
+        res = validate_dn_stock(doc.name)
+        if res.get("status") == "failed":
+             msg = _("<h5>Insufficient Stock to Submit</h5>")
+             msg += _("You cannot submit this order because the following items do not have enough available actual stock:")
+             
+             items_list = [f"<b>{i['item_code']}</b> (Required: {i['required']}, Available: {i['available']})" for i in res['items']]
+             msg += "<ul><li>" + "</li><li>".join(items_list) + "</li></ul>"
+             
+             if res.get("blockers"):
+                 msg += "<hr><b>Stock is reserved by the following Approved Orders. Please Request Release:</b><br>"
+                 for b in res['blockers']:
+                     msg += f"<p><a href='/app/sales-order/{b['name']}'>{b['name']}</a> ({b['customer']}) - Qty: {b['qty']}</p>"
+             
+             frappe.throw(msg, title=_("Stock Unavailable"))
