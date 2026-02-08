@@ -130,9 +130,10 @@ permission_query_conditions = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Sales Order": "systech.overrides.sales_order.CustomSalesOrder",
+	"Bin": "systech.overrides.bin.CustomBin"
+}
 
 # Document Events
 # ---------------
@@ -161,6 +162,12 @@ doc_events = {
     },
     "Customer": {
         "before_insert": "systech.api.customer.auto_assign_sales_team"
+    },
+    "Delivery Note": {
+        "on_submit": "systech.services.workflow.enforce_dn_stock"
+    },
+    "Bin": {
+        "before_save": "systech.services.bin_hooks.recalculate_bin_reserved_stock"
     },
     "Project": {
         "validate": "systech.services.project_budget.validate_project_budget"
