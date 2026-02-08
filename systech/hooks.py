@@ -131,7 +131,6 @@ permission_query_conditions = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Sales Order": "systech.overrides.sales_order.CustomSalesOrder",
 	"Bin": "systech.overrides.bin.CustomBin"
 }
 
