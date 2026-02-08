@@ -8,26 +8,33 @@ class CustomBin(Bin):
     Only counts reservations from recent orders or orders with delivery notes.
     """
     
-    def update_reserved_stock(self, item_code=None, warehouse=None):
+    def recalculate_qty(self):
         """
-        Override to use smart reservation calculation.
-        Only counts:
-        - Recent sales orders (last 3 months), OR
-        - Older sales orders that have delivery notes
-        
-        This prevents old stuck orders from blocking inventory.
+        Override recalculate_qty to use smart reservation calculation.
         """
-        if not item_code:
-            item_code = self.item_code
-        if not warehouse:
-            warehouse = self.warehouse
+        from erpnext.manufacturing.doctype.work_order.work_order import get_reserved_qty_for_production
+        from erpnext.stock.stock_balance import (
+            get_indented_qty,
+            get_ordered_qty,
+            get_planned_qty,
+        )
+        from erpnext.stock.doctype.bin.bin import get_actual_qty # Import from bin module
+
+        self.actual_qty = get_actual_qty(self.item_code, self.warehouse)
+        self.planned_qty = get_planned_qty(self.item_code, self.warehouse)
+        self.indented_qty = get_indented_qty(self.item_code, self.warehouse)
+        self.ordered_qty = get_ordered_qty(self.item_code, self.warehouse)
         
-        # Use our smart reservation query
-        reserved_qty = self._calculate_smart_reserved_qty(item_code, warehouse)
+        # USE SMART LOGIC instead of get_reserved_qty
+        self.reserved_qty = self._calculate_smart_reserved_qty(self.item_code, self.warehouse)
         
-        # Update the bin
-        self.db_set("reserved_qty", flt(reserved_qty))
+        self.reserved_qty_for_production = get_reserved_qty_for_production(self.item_code, self.warehouse)
+
+        self.update_reserved_qty_for_sub_contracting(update_qty=False)
+        self.update_reserved_qty_for_production_plan(skip_project_qty_update=True, update_qty=False)
         self.set_projected_qty()
+        self.db_update() # Use db_update instead of save to avoid recursion if hooked 
+
     
     def _calculate_smart_reserved_qty(self, item_code, warehouse):
         """
