@@ -51,9 +51,8 @@ def validate_stock_availability(doc):
         )
         
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
-        # Calculate Reserved Qty from Current Year Orders Only
+        # Calculate Reserved Qty - Only count recent orders or orders with delivery notes
         import datetime
-        current_year_start = f"{datetime.date.today().year}-01-01"
         
         reserved_data = frappe.db.sql("""
             SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
@@ -63,8 +62,18 @@ def validate_stock_availability(doc):
             AND t2.warehouse = %s
             AND t1.docstatus = 1
             AND t1.status != 'Closed'
-            AND t1.transaction_date >= %s
-        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+            AND (
+                -- Recent orders (last 3 months) always count
+                t1.transaction_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+                OR
+                -- Older orders only count if they have delivery notes
+                EXISTS (
+                    SELECT 1 FROM `tabDelivery Note Item` dni
+                    WHERE dni.against_sales_order = t1.name
+                    AND dni.docstatus = 1
+                )
+            )
+        """, (item.item_code, warehouse), as_dict=True)
         
         reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
@@ -362,9 +371,8 @@ def check_stock_availability(docname):
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
         
-        # Calculate Reserved Qty from Current Year Orders Only
+        # Calculate Reserved Qty - Only count recent orders or orders with delivery notes
         import datetime
-        current_year_start = f"{datetime.date.today().year}-01-01"
         
         reserved_data = frappe.db.sql("""
             SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
@@ -374,8 +382,18 @@ def check_stock_availability(docname):
             AND t2.warehouse = %s
             AND t1.docstatus = 1
             AND t1.status != 'Closed'
-            AND t1.transaction_date >= %s
-        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+            AND (
+                -- Recent orders (last 3 months) always count
+                t1.transaction_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+                OR
+                -- Older orders only count if they have delivery notes
+                EXISTS (
+                    SELECT 1 FROM `tabDelivery Note Item` dni
+                    WHERE dni.against_sales_order = t1.name
+                    AND dni.docstatus = 1
+                )
+            )
+        """, (item.item_code, warehouse), as_dict=True)
         
         reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
@@ -483,9 +501,8 @@ def validate_dn_stock(docname):
         )
         
         actual = flt(bin_data.actual_qty) if bin_data else 0.0
-        # Calculate Reserved Qty from Current Year Orders Only
+        # Calculate Reserved Qty - Only count recent orders or orders with delivery notes
         import datetime
-        current_year_start = f"{datetime.date.today().year}-01-01"
         
         reserved_data = frappe.db.sql("""
             SELECT sum(t2.qty - t2.delivered_qty) as reserved_qty
@@ -495,8 +512,18 @@ def validate_dn_stock(docname):
             AND t2.warehouse = %s
             AND t1.docstatus = 1
             AND t1.status != 'Closed'
-            AND t1.transaction_date >= %s
-        """, (item.item_code, warehouse, current_year_start), as_dict=True)
+            AND (
+                -- Recent orders (last 3 months) always count
+                t1.transaction_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+                OR
+                -- Older orders only count if they have delivery notes
+                EXISTS (
+                    SELECT 1 FROM `tabDelivery Note Item` dni
+                    WHERE dni.against_sales_order = t1.name
+                    AND dni.docstatus = 1
+                )
+            )
+        """, (item.item_code, warehouse), as_dict=True)
         
         reserved = flt(reserved_data[0].reserved_qty) if reserved_data and reserved_data[0].reserved_qty else 0.0
         
